@@ -8,6 +8,7 @@ def onInit(isReload):
 	当引擎启动后初始化完所有的脚本后这个接口被调用
 	"""
 	DEBUG_MSG('onInit::isReload:%s' % isReload)
+
 	
 def onGlobalData(key, value):
 	"""

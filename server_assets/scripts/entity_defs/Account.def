@@ -4,18 +4,18 @@
 
 	<ClientMethods>
         <OnSay>
-            <Arg>   UNICODE </Arg>
+            <Arg>   CHAT_INFO </Arg>
         </OnSay>
 	</ClientMethods>
 
 	<BaseMethods>
+	</BaseMethods>
+
+	<CellMethods>
         <Say>
             <Exposed/>
             <Arg> UNICODE </Arg>
         </Say>
-	</BaseMethods>
-
-	<CellMethods>
 	</CellMethods>
 
 </root>

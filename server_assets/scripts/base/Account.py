@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import KBEngine
 from KBEDebug import *
+from CHAT_INFO import TChatInfo
+import time #python包
 
 class Account(KBEngine.Proxy):
 	def __init__(self):
@@ -22,6 +24,10 @@ class Account(KBEngine.Proxy):
 		cell部分。
 		"""
 		INFO_MSG("account[%i] entities enable. entityCall:%s" % (self.id, self.client))
+		FirstRoom = KBEngine.globalData["FirstRoom"]
+		if FirstRoom.cell is None:
+			return
+		self.createCellEntity(FirstRoom.cell)
 			
 	def onLogOnAttempt(self, ip, port, password):
 		"""
@@ -39,11 +45,4 @@ class Account(KBEngine.Proxy):
 		DEBUG_MSG("Account[%i].onClientDeath:" % self.id)
 		self.destroy()
 
-	def Say(self, Msg):
-		"""
-		被客户端调用的说话方法
-		：param Msg:说话内容
-        """
-		DEBUG_MSG("Consumer[%i] Say %s" % (self.id, Msg))
-		BackMsg = Msg + "服务器发送"
-		self.client.OnSay(BackMsg)
+
