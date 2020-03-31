@@ -23,11 +23,8 @@ class Account(KBEngine.Proxy):
 		该entity被正式激活为可使用， 此时entity已经建立了client对应实体， 可以在此创建它的
 		cell部分。
 		"""
-		INFO_MSG("account[%i] entities enable. entityCall:%s" % (self.id, self.client))
-		FirstRoom = KBEngine.globalData["FirstRoom"]
-		if FirstRoom.cell is None:
-			return
-		self.createCellEntity(FirstRoom.cell)
+		RoomMgr = KBEngine.globalData["RoomMgr"]
+		RoomMgr.EnterRoom("房间_1", self)
 			
 	def onLogOnAttempt(self, ip, port, password):
 		"""
