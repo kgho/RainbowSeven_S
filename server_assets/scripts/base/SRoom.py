@@ -12,7 +12,7 @@ class SRoom(KBEngine.Space):
 		实体进入房间
 		：param EntityCall
 		"""
-		EntityCall.createCallEntity(self.cell)
+		EntityCall.createCellEntity(self.cell)
 		self.EntityDict[EntityCall.id] = EntityCall
 
 	def Leave(self, EntityId):

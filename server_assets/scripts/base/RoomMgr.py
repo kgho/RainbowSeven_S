@@ -32,7 +32,7 @@ class RoomMgr(KBEngine.Entity):
 		"""
 		Room = self.RoomDict[Name]
 		if Room is None:
-			DEBUG_MSG("RroomMgr Enter %s Failed" % Name)
+			DEBUG_MSG("RoomMgr Enter %s Failed" % Name)
 			return
 
 		Room.Enter(EntityCall)
