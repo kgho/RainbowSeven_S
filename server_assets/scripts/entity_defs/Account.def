@@ -1,4 +1,12 @@
 <root>
+   <Volatile>
+        <position/>
+        <yaw/>
+        <pitch/>
+        <roll/>
+        <optimized> false </optimized>
+    </Volatile>
+    
 	<Properties>
 	</Properties>
 
