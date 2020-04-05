@@ -10,4 +10,5 @@
     <SRoom/>
     <ERoom/>
     <RoomMgr/>
+    <Gate hasClient="true"></Gate>
 </root>
