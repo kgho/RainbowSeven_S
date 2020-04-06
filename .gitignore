@@ -1,6 +1,7 @@
 # ----[ Visual Studio ]------- #
 /kbe/src/_objs
 /kbe/src/ipch
+/server_assets
 __pycache__/
 logs/
 *.suo

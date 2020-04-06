@@ -7,7 +7,13 @@ import time #python包
 class Account(KBEngine.Proxy):
 	def __init__(self):
 		KBEngine.Proxy.__init__(self)
-		
+
+		#该变量保存该实体所在房间的ID
+		self.CurrentRoomId = 0
+		#要传送到的房间ID
+		self.TeleportRoomId = 0
+
+
 	def onTimer(self, id, userArg):
 		"""
 		KBEngine method.
@@ -25,7 +31,20 @@ class Account(KBEngine.Proxy):
 		"""
 		RoomMgr = KBEngine.globalData["RoomMgr"]
 		RoomMgr.EnterRoom("房间_1", self)
-			
+
+	def ReqTeleport(self):
+		"""
+		cell实体传送请求
+		"""
+		#需要获取玩家所在房间的base实体ID
+		KBEngine.globalData["RoomMgr"].TeleportRoom(self)
+
+	def TeleportSuccess(self):
+		"""
+		cell实体传送成功的回调
+		"""
+		KBEngine.globalData["RoomMgr"].TeleportSuccess(self)
+
 	def onLogOnAttempt(self, ip, port, password):
 		"""
 		KBEngine method.

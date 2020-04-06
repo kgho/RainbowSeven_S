@@ -49,6 +49,31 @@ class RoomMgr(KBEngine.Entity):
 
 		Room.Leave(EntityCall)
 
+	def TeleportRoom(self, EntityCall):
+		"""
+		寻找合适的房间给玩家传送
+		:param EntityCall: 玩家的base实体
+		"""
+		#遍历房间,找到一个房间的ID和玩家base实体所在房间ID不同，告诉玩家cell实体传送到该房间
+		for RoomName, Room in self.RoomDict.items():
+			if Room.id is not EntityCall.CurrentRoomId:
+				EntityCall.TeleportRoomId = Room.id
+				EntityCall.cell.TeleportRoom(Room)
+				return
+
+	def TeleportSuccess(self, EntityCall):
+		"""
+		传送成功修改数据
+		"""
+		for RoomName, Room in self.RoomDict.items():
+			#将实体从之前的房间移除
+			if Room.id is EntityCall.CurrentRoomId:
+				del Room.EntityDict[EntityCall.id]
+			if Room.id is EntityCall.TeleportRomId:
+				Room.EntityDict[EntityCall.id] = EntityCall
+		#更新玩家当前房间id
+		EntityCall.CurrentRoomId = EntityCall.TeleportRoomId
+
 	def OnRoomGetCell(self, Room):
 		"""
 		创建房间Cell实体成功的回调函数

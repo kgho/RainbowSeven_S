@@ -13,7 +13,14 @@ class Gate(KBEngine.Entity):
 
 		#60秒后执行一次的定时器，参数为 2
 		#60秒后销毁触发器
-		self.addTimer(60, 0, 2)
+		#self.addTimer(60, 0, 2)
+
+	def GetScriptName(self):
+		"""
+		获取类名
+		:return： 返回类名
+		"""
+		return self.__class__.__name__
 
 	def onTimer(self, tid, userArg):
 		"""
@@ -32,6 +39,10 @@ class Gate(KBEngine.Entity):
 	def onEnterTrap( self, entityEntering, rangeXZ, rangeY, controllerID, userArg = 0 ):
 		DEBUG_MSG("Gate[%d]::onEnterTarp entityEntering[%d]" %(self.id, entityEntering.id))
 
+		#如果进入的实体的类是Account
+		if entityEntering.GetScriptName() is "Account":
+			#得到是cell实体，获取base实体调用ReqTeleport
+			entityEntering.base.ReqTeleport()
 
 	def onLeaveTrap( self, entityLeaving, rangeXZ, rangeY, controllerID, userArg = 0 ):
 		DEBUG_MSG("Gate[%d]::onLeaveTrap entityEntering[%d]" %(self.id, entityLeaving.id))

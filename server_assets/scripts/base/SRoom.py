@@ -13,6 +13,7 @@ class SRoom(KBEngine.Space):
 		：param EntityCall
 		"""
 		EntityCall.createCellEntity(self.cell)
+		EntityCall.CurrentRoomId = self.id
 		self.EntityDict[EntityCall.id] = EntityCall
 
 	def Leave(self, EntityId):
@@ -27,7 +28,6 @@ class SRoom(KBEngine.Space):
 
 		if EntityCall.cell is not None:
 			EntityCall.destroyCellEntity
-
 
 	def onGetCell(self):
 		"""
