@@ -13,6 +13,9 @@ class Account(KBEngine.Proxy):
 		#要传送到的房间ID
 		self.TeleportRoomId = 0
 
+		#3分钟后销毁（模拟退出）
+		#self.addTimer(60 *3, 0, 0)
+
 
 	def onTimer(self, id, userArg):
 		"""
@@ -61,4 +64,14 @@ class Account(KBEngine.Proxy):
 		DEBUG_MSG("Account[%i].onClientDeath:" % self.id)
 		self.destroy()
 
+	def onTimer(self, TimeId, UserArg):
+		if UserArg is 0:
+			KBEngine.globalData["RoomMgr"].LeaveRoom(self)
 
+	def onLoseCell(self):
+		DEBUG_MSG("Account[%d] onLoseCell" % self.id)
+		self.writeToDB()
+		self.destroy()
+
+	def onDestroy(self):
+		DEBUG_MSG("Account[%d] onDestroy" % self.id)

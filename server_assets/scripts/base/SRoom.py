@@ -26,8 +26,15 @@ class SRoom(KBEngine.Space):
 			DEBUG_MSG("SRoom %s has no Entity %i" % (self.Name, Entity))
 			return
 
+		del self.EntityDict[EntityId]
+
+		#如果cell实体存在，先销毁cell实体
 		if EntityCall.cell is not None:
 			EntityCall.destroyCellEntity
+		else:
+			#如果只有base实体，保存数据后直接销毁,销毁后Account会回调OnLoseCell
+			EntityCall.writeToDB()
+			EntityCall.destroy()
 
 	def onGetCell(self):
 		"""

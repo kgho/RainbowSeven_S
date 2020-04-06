@@ -37,10 +37,15 @@ class RoomMgr(KBEngine.Entity):
 
 		Room.Enter(EntityCall)
 
-	def LeaveRoom(self, EntityID, Name):
+	def LeaveRoom(self, EntityCall):
 		"""
 		请求离开房间
 		:param EntityID:请求者ID
+		"""
+		for RoomName, Room in self.RoomDict.items():
+			if Room.id is EntityCall.CurrentRoomId:
+				Room.Leave(EntityCall.id)
+				return
 		"""
 		Room = self.RoomDict[Name]
 		if Room is None:
@@ -48,6 +53,7 @@ class RoomMgr(KBEngine.Entity):
 			return
 
 		Room.Leave(EntityCall)
+		"""
 
 	def TeleportRoom(self, EntityCall):
 		"""
