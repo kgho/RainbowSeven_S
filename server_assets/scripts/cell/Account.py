@@ -54,4 +54,4 @@ class Account(KBEngine.Entity):
 
 	#传送成功回调,告诉base实体传送成功
 	def onTeleportSuccess( self, nearbyEntity ):
-		cell.base.TeleportSuccess()
+		self.base.TeleportSuccess()

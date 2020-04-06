@@ -31,7 +31,7 @@ class Gate(KBEngine.Entity):
 		if userArg is 1:
 			DEBUG_MSG("Gate[%d]::addProximity" % self.id)
 			#水平方向为3的正方形 对应UE中的长度为300
-			self.ControllerId = self.addProximity(3, 0, 0)
+			self.ControllerId = self.addProximity(1, 0, 0)
 		elif userArg is 2:
 			DEBUG_MSG("Gate[%d]::cancelController" % self.id)
 			self.cancelController(self.ControllerId)

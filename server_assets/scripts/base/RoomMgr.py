@@ -69,7 +69,7 @@ class RoomMgr(KBEngine.Entity):
 			#将实体从之前的房间移除
 			if Room.id is EntityCall.CurrentRoomId:
 				del Room.EntityDict[EntityCall.id]
-			if Room.id is EntityCall.TeleportRomId:
+			if Room.id is EntityCall.TeleportRoomId:
 				Room.EntityDict[EntityCall.id] = EntityCall
 		#更新玩家当前房间id
 		EntityCall.CurrentRoomId = EntityCall.TeleportRoomId
