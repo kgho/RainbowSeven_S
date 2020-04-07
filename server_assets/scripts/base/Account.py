@@ -8,14 +8,6 @@ class Account(KBEngine.Proxy):
 	def __init__(self):
 		KBEngine.Proxy.__init__(self)
 
-		#该变量保存该实体所在房间的ID
-		self.CurrentRoomId = 0
-		#要传送到的房间ID
-		self.TeleportRoomId = 0
-
-		#3分钟后销毁（模拟退出）
-		#self.addTimer(60 *3, 0, 0)
-
 
 	def onTimer(self, id, userArg):
 		"""
@@ -32,21 +24,7 @@ class Account(KBEngine.Proxy):
 		该entity被正式激活为可使用， 此时entity已经建立了client对应实体， 可以在此创建它的
 		cell部分。
 		"""
-		RoomMgr = KBEngine.globalData["RoomMgr"]
-		RoomMgr.EnterRoom("房间_1", self)
-
-	def ReqTeleport(self):
-		"""
-		cell实体传送请求
-		"""
-		#需要获取玩家所在房间的base实体ID
-		KBEngine.globalData["RoomMgr"].TeleportRoom(self)
-
-	def TeleportSuccess(self):
-		"""
-		cell实体传送成功的回调
-		"""
-		KBEngine.globalData["RoomMgr"].TeleportSuccess(self)
+		DEBUG_MSG("account[%i] entities. eneityCall:%s" %(self.id, self.cleint))
 
 	def onLogOnAttempt(self, ip, port, password):
 		"""
@@ -63,15 +41,3 @@ class Account(KBEngine.Proxy):
 		"""
 		DEBUG_MSG("Account[%i].onClientDeath:" % self.id)
 		self.destroy()
-
-	def onTimer(self, TimeId, UserArg):
-		if UserArg is 0:
-			KBEngine.globalData["RoomMgr"].LeaveRoom(self)
-
-	def onLoseCell(self):
-		DEBUG_MSG("Account[%d] onLoseCell" % self.id)
-		self.writeToDB()
-		self.destroy()
-
-	def onDestroy(self):
-		DEBUG_MSG("Account[%d] onDestroy" % self.id)

@@ -1,36 +1,13 @@
 <root>
-   <Volatile>
-        <position/>
-        <yaw/>
-        <pitch/>
-        <roll/>
-        <optimized> false </optimized>
-    </Volatile>
-    
 	<Properties>
 	</Properties>
 
 	<ClientMethods>
-        <OnSay>
-            <Arg>   CHAT_INFO </Arg>
-        </OnSay>
 	</ClientMethods>
 
 	<BaseMethods>
-        <ReqTeleport>
-        </ReqTeleport>
-        <TeleportSuccess>
-        </TeleportSuccess>
 	</BaseMethods>
 
 	<CellMethods>
-        <Say>
-            <Exposed/>
-            <Arg> UNICODE </Arg>
-        </Say>
-        <TeleportRoom>
-            <Arg>   ENTITYCALL  </Arg> 
-        </TeleportRoom>
 	</CellMethods>
-
 </root>
