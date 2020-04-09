@@ -7,8 +7,10 @@
 
 	<!-- <Avatar/> -->
 	<Account hasClient="true"></Account><!-- <Account hasCell="true" hasBase="true" hasClient="true"></Account> -->
+    <!--
     <SRoom/>
     <ERoom/>
     <RoomMgr/>
     <Gate hasClient="true"></Gate>
+    -->
 </root>

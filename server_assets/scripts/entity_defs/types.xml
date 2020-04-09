@@ -1,16 +1,2 @@
 <root>
-    <CHAT_INFO> FIXED_DICT
-        <implementedBy>CHAT_INFO.ChatInfoInst</implementedBy>
-        <Properties>
-            <Name>
-                <Type>  UNICODE </Type>
-            </Name>
-              <Time>
-                <Type>  UNICODE </Type>
-            </Time>
-              <Msg>
-                <Type>  UNICODE </Type>
-            </Msg>
-        </Properties>
-    </CHAT_INFO>
 </root>
