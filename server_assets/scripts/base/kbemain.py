@@ -12,10 +12,6 @@ def onBaseAppReady(isBootstrap):
 	"""
 	INFO_MSG('onBaseAppReady: isBootstrap=%s, appID=%s, bootstrapGroupIndex=%s, bootstrapGlobalIndex=%s' % \
 	 (isBootstrap, os.getenv("KBE_COMPONENTID"), os.getenv("KBE_BOOTIDX_GROUP"), os.getenv("KBE_BOOTIDX_GLOBAL")))
-	
-	# Props = {"Name" : "FirstName", "Count" : 10}
-	# KBEngine.createEntityLocally("ERoom", Props)
-	KBEngine.createEntityLocally("RoomMgr", {})
 
 def onReadyForLogin(isBootstrap):
 	"""

@@ -1,20 +1,17 @@
 # -*- coding: utf-8 -*-
 import KBEngine
 from KBEDebug import *
-from CHAT_INFO import TChatInfo
-import time #python包
 
 class Account(KBEngine.Proxy):
 	def __init__(self):
 		KBEngine.Proxy.__init__(self)
 
-
 	def onTimer(self, id, userArg):
 		"""
 		KBEngine method.
 		使用addTimer后， 当时间到达则该接口被调用
-		@param id		: addTimer 的返回值ID
-		@param userArg	: addTimer 最后一个参数所给入的数据
+		@param id       : addTimer 的返回值ID
+		@param userArg  : addTimer 最后一个参数所给入的数据
 		"""
 		DEBUG_MSG(id, userArg)
 		
