@@ -22,7 +22,7 @@ class Account(KBEngine.Proxy):
         该entity被正式激活为可使用， 此时entity已经建立了client对应实体， 可以在此创建它的
         cell部分。
         """
-        DEBUG_MSG("account[%i] entities. eneityCall:%s" %(self.id, self.cleint))
+        DEBUG_MSG("account[%i] entities. eneityCall:%s" %(self.id, self.client))
 
     def onLogOnAttempt(self, ip, port, password):
         """
@@ -39,6 +39,14 @@ class Account(KBEngine.Proxy):
         """
         DEBUG_MSG("Account[%i].onClientDeath:" % self.id)
         self.destroy()
+
+    def ReqAccountInfo(self):
+        """
+        请求账户信息：等级，经验，声望值，金币
+        """
+        DEBUG_MSG("Account[%i]::ReqAccountInfo: Level=%i, Exp=%i, Fame=%i, Coin=%i." % (self.id, self.Level, self.Exp, self.Fame, self.Coin))
+
+        self.client.OnReqAccountInfo(self.Level, self.Exp, self.Fame, self.Coin)
 
     def ReqRoleList(self):
         """

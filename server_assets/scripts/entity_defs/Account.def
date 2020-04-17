@@ -1,5 +1,33 @@
 <root>
     <Properties>
+        <Level>
+            <Type> UINT16 </Type>
+            <Flags> BASE_AND_CLIENT </Flags>
+            <Default> 1 </Default>
+            <Persistent> true </Persistent>
+        </Level>
+
+        <Exp>
+            <Type> UINT64 </Type>
+            <Flags> BASE_AND_CLIENT </Flags>
+            <Default> 0 </Default>
+            <Persistent> true </Persistent>
+        </Exp>
+
+        <Fame>
+            <Type> UINT64 </Type>
+            <Flags> BASE_AND_CLIENT </Flags>
+            <Default> 0 </Default>
+            <Persistent> true </Persistent>
+        </Fame>
+
+        <Coin>
+            <Type> UINT64 </Type>
+            <Flags> BASE_AND_CLIENT </Flags>
+            <Default> 10000 </Default>
+            <Persistent> true </Persistent>
+        </Coin>
+
         <RoleList>
             <Type> ROLE_LIST </Type>
             <Flags> BASE </Flags>
@@ -8,6 +36,13 @@
     </Properties>
 
     <ClientMethods>
+        <OnReqAccountInfo>
+            <Arg> UINT16 </Arg> 
+            <Arg> UINT64 </Arg>
+            <Arg> UINT64 </Arg>
+            <Arg> UINT64 </Arg>
+        </OnReqAccountInfo>
+
         <!-- 请求干员信息列表回调 -->
         <OnReqRoleList>
             <Arg> ROLE_LIST </Arg>
@@ -20,6 +55,11 @@
     </ClientMethods>
 
     <BaseMethods>
+        <!-- 请求账户信息：等级，经验，声望值，金币 -->
+        <ReqAccountInfo>
+        <Exposed/>
+        </ReqAccountInfo>
+
         <!-- 客户端请求干员信息列表 -->
         <ReqRoleList>
         <Exposed/>
