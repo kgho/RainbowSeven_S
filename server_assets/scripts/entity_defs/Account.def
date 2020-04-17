@@ -1,13 +1,37 @@
 <root>
-	<Properties>
-	</Properties>
+    <Properties>
+        <RoleList>
+            <Type> ROLE_LIST </Type>
+            <Flags> BASE </Flags>
+            <Persistent> true </Persistent>
+        </RoleList>
+    </Properties>
 
-	<ClientMethods>
-	</ClientMethods>
+    <ClientMethods>
+        <!-- 请求干员信息列表回调 -->
+        <OnReqRoleList>
+            <Arg> ROLE_LIST </Arg>
+        </OnReqRoleList>
 
-	<BaseMethods>
-	</BaseMethods>
+        <!--请求解锁干员回调 -->
+        <OnReqUnlockRole>
+            <Arg>  UINT8  </Arg> <!--结果-->
+        </OnReqUnlockRole>
+    </ClientMethods>
 
-	<CellMethods>
-	</CellMethods>
+    <BaseMethods>
+        <!-- 客户端请求干员信息列表 -->
+        <ReqRoleList>
+        <Exposed/>
+        </ReqRoleList>
+
+        <!-- 客户端请求解锁干员 -->
+        <ReqUnlockole>
+            <Exposed/>
+            <Arg>    UINT8    </Arg> <!-- 角色类型RoleType -->
+        </ReqUnlockole>
+    </BaseMethods>
+
+    <CellMethods>
+    </CellMethods>
 </root>

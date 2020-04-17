@@ -1,2 +1,44 @@
 <root>
+    <DBID>  UINT64  </DBID>>
+    
+    <!-- 干员信息 -->
+    <ROLE_INFO> FIXED_DICT
+        <implementedBy>ROLE_INFO.RoleInfoInst</implementedBy>
+         <Properties>
+            <Dbid>
+                <Type> DBID </Type>     <!-- 数据库ID -->
+            </Dbid>
+            <RoleType>
+                <Type> UINT8 </Type>    <!-- 干员类型 -->
+            </RoleType>
+             <IsLock>
+                <Type> UINT8 </Type>    <!-- 是否解锁 0:Lock    1:UnLock-->
+            </IsLock>
+            <Kill>
+                <Type> UINT32 </Type>   <!-- 总击杀 -->
+            </Kill>
+             <Death>
+                <Type> UINT32 </Type>   <!-- 总死亡 -->
+            </Death>
+             <Assist>
+                <Type> UINT32 </Type>   <!-- 总助攻 -->
+            </Assist>
+             <Point>
+                <Type> UINT32 </Type>   <!-- 总分 -->
+            </Point>
+             <PlayCount>
+                <Type> UINT32 </Type>   <!-- 使用次数 -->
+            </PlayCount>
+        </Properties>
+    </ROLE_INFO>
+
+     <!--干员列表，创建账户时自动获得默认干员，活动时玩家可以使用未解锁的干员-->
+    <ROLE_LIST> FIXED_DICT
+        <implementedBy>ROLE_INFO.ROLE_LIST_PICKLER</implementedBy>
+        <Properties>
+            <Value>
+                <Type> ARRAY <of> ROLE_INFO </of> </Type>
+            </Value>
+        </Properties>
+    </ROLE_LIST>
 </root>
