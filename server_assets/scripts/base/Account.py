@@ -75,12 +75,12 @@ class Account(KBEngine.Proxy):
         for key, info in self.RoleList.items():
             # 已存在 并 已解锁
             if info[1] == RoleType and info[2] == 1:
-                self.client.OnReqUnlockRole(1)
+                self.client.OnReqUnlockRole(1, RoleType)
                 DEBUG_MSG("Account[%i]::ReqUnlockRole: RoleType=%i Has Unlock." % (self.id, RoleType))
                 return
             # 与存在 并 未解锁，解锁后返回
             if info[1] == RoleType and info[2] == 0:
-                self.client.OnReqUnlockRole(2)
+                self.client.OnReqUnlockRole(2, RoleType)
                 DEBUG_MSG("Account[%i]::ReqUnlockRole: RoleType=%i Unlock Angain." % (self.id, RoleType))
                 return
 
@@ -101,7 +101,7 @@ class Account(KBEngine.Proxy):
             Role.writeToDB(self._OnRoleSaved)
         else:
             # 创建Role失败
-            self.client.OnReqUnlockRole(3)
+            self.client.OnReqUnlockRole(3, RoleType)
 
     def _OnRoleSaved(self, Success, Role):
         """
@@ -130,18 +130,18 @@ class Account(KBEngine.Proxy):
                 # 通知客户端 解锁成功
                 if self.client:
                     # 说明Role 新解锁干员信息 写入数据库成功
-                    self.client.OnReqUnlockRole(0)
+                    self.client.OnReqUnlockRole(0, RoleInfo[1])
                 # 保存到数据库
                 self.writeToDB()
             else:
                 if self.client:
                     # 说明写入失败
-                    self.client.OnReqUnlockRole(4)
+                    self.client.OnReqUnlockRole(4, RoleInfo[1])
             # 销毁Role
             Role.destroy()
         else:
             if self.client:
                 # 解锁失败
-                self.client.self.client.OnReqUnlockRole(3)
+                self.client.self.client.OnReqUnlockRole(3, RoleInfo[1])
 
 

@@ -52,6 +52,7 @@
         <!--请求解锁干员回调 -->
         <OnReqUnlockRole>
             <Arg>  UINT8  </Arg> <!--结果-->
+            <Arg>  UINT8  </Arg> <!--成功解锁的干员 编号 -->
         </OnReqUnlockRole>
     </ClientMethods>
 
