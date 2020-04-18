@@ -36,6 +36,7 @@
     </Properties>
 
     <ClientMethods>
+        <!-- 请求账户信息回调 -->
         <OnReqAccountInfo>
             <Arg> UINT16 </Arg> 
             <Arg> UINT64 </Arg>
@@ -66,10 +67,10 @@
         </ReqRoleList>
 
         <!-- 客户端请求解锁干员 -->
-        <ReqUnlockole>
+        <ReqUnlockRole>
             <Exposed/>
             <Arg>    UINT8    </Arg> <!-- 角色类型RoleType -->
-        </ReqUnlockole>
+        </ReqUnlockRole>
     </BaseMethods>
 
     <CellMethods>
