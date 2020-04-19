@@ -48,6 +48,17 @@ class Account(KBEngine.Proxy):
 
         self.client.OnReqAccountInfo(self.Level, self.Exp, self.Fame, self.Coin)
 
+    def ReqRoleInfo(self, RoleType):
+        """
+        客户端请求干员信息
+        """
+        DEBUG_MSG("Account[%i]::ReqRoleInfo: RoleType=%i" % (self.id, RoleType))
+
+        # 通过干员类型 从该账户干员列表中 找到对应干员
+        for key, info in self.RoleList.items():
+            if info[1] == RoleType:
+                self.client.OnReqRoleInfo(info)
+
     def ReqRoleList(self):
         """
         客户端请求干员列表

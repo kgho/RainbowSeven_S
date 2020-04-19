@@ -54,6 +54,11 @@
             <Arg>  UINT8  </Arg> <!--结果-->
             <Arg>  UINT8  </Arg> <!--成功解锁的干员 编号 -->
         </OnReqUnlockRole>
+
+        <!-- 请求干员信息回调 -->
+        <OnReqRoleInfo>
+            <Arg> ROLE_INFO </Arg>
+        </OnReqRoleInfo>        
     </ClientMethods>
 
     <BaseMethods>
@@ -72,6 +77,12 @@
             <Exposed/>
             <Arg>    UINT8    </Arg> <!-- 角色类型RoleType -->
         </ReqUnlockRole>
+
+        <!-- 客户端请求干员信息 -->
+        <ReqRoleInfo>
+            <Exposed/>
+             <Arg>    UINT8    </Arg> <!-- 角色类型RoleType -->
+        </ReqRoleInfo>
     </BaseMethods>
 
     <CellMethods>
