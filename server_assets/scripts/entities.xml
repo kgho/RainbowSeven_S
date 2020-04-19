@@ -9,4 +9,6 @@
 	<Account hasClient="true"></Account><!-- <Account hasCell="true" hasBase="true" hasClient="true"></Account> -->
     <!-- 干员角色 -->
     <Role hasClient="true"></Role>
+    <Room/>
+    <RoomMgr/>
 </root>

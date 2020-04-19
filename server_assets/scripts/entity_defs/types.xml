@@ -41,4 +41,27 @@
             </Value>
         </Properties>
     </ROLE_LIST>
+
+        <!-- 房间信息，房间ID 房间名称-->
+    <ROOM_INFO> FIXED_DICT
+        <implementedBy>ROOM_INFO.RoomInfoInst</implementedBy>
+        <Properties>
+            <RoomId>
+                <Type> UINT64 </Type>
+            </RoomId>
+            <Name>
+                <Type> UNICODE </Type>
+            </Name>
+        </Properties>
+    </ROOM_INFO>
+
+    <!-- 房间信息列表 -->
+    <ROOM_LIST> FIXED_DICT
+        <implementedBy>ROOM_INFO.ROOM_LIST_PICKLER</implementedBy>
+        <Properties>
+            <Value>
+                <Type> ARRAY <of> ROOM_INFO </of> </Type>
+            </Value>
+        </Properties>
+    </ROOM_LIST>
 </root>

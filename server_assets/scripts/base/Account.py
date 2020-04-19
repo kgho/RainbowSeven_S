@@ -155,4 +155,8 @@ class Account(KBEngine.Proxy):
                 # 解锁失败
                 self.client.self.client.OnReqUnlockRole(3, RoleInfo[1])
 
-
+    def OnAccountCreateRoom(self, Succeed, RoomId, Name)
+        """
+        创建房间的回调函数
+        """
+        pass
