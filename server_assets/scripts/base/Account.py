@@ -2,6 +2,7 @@
 import KBEngine
 from KBEDebug import *
 from ROLE_INFO import TRoleInfo, TRoleList
+from ROOM_INFO import TRoomInfo
 
 class Account(KBEngine.Proxy):
     def __init__(self):
@@ -155,8 +156,38 @@ class Account(KBEngine.Proxy):
                 # 解锁失败
                 self.client.self.client.OnReqUnlockRole(3, RoleInfo[1])
 
-    def OnAccountCreateRoom(self, Succeed, RoomId, Name)
+    def ReqRoomList(self):
+        """
+        客户端请求房间列表
+        """
+        RoomList = KBEngine.globalData["RoomMgr"].GetRoomList()
+        DEBUG_MSG("Account[%i].ReqRoomList: RoomList = %s" % (self.id, RoomList.asDict()))
+        self.client.OnReqRoomList(RoomList)
+
+    def ReqCreateRoom(self, Name):  
+        """
+        客户端请求创建房间, 传入房间名字
+        """
+        DEBUG_MSG("Account[%i].ReqCreateRoom: RoomName = %s" % (self.id, Name))
+        KBEngine.globalData["RoomMgr"].CreateRoom(Name, self)
+
+    def OnAccountCreateRoom(self, Succeed, RoomId, Name):
         """
         创建房间的回调函数
         """
-        pass
+        Props = {"RoomId" : RoomId, "Name" : Name}
+        RoomInfo = TRoomInfo().createFromDict(Props)
+
+        if Succeed:
+            self.client.OnCreateRoom(0, RoomInfo)
+        else:
+            self.client.OnCreateRoom(1, RoomInfo)
+
+    def ReqEnterRoom(self, RoomId):
+        """
+        客户端请求进入房间
+        """
+        DEBUG_MSG("Account[%i].ReqEnterRoom: RoomId = %i " % (self.id, RoomId))
+        # 保存当前所在房间id
+        self.CurrentRoomID = RoomId
+

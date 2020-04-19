@@ -4,7 +4,10 @@ from KBEDebug import *
 from ROOM_INFO import TRoomInfo, TRoomList
 from Room import Room
 
-class RSOperator(KBEngine.Entity):
+class RoomMgr(KBEngine.Entity):
+    """
+    Room的房间管理器
+    """
     def __init__(self):
         KBEngine.Entity.__init__(self)
         # 将RoomMgr存储在globalData中，方便获取
@@ -22,7 +25,7 @@ class RSOperator(KBEngine.Entity):
         self.CreateRoom("自动创建-肃清模式-木屋_2", None)
 
 
-    def CreateRoom(self, Name, Account)
+    def CreateRoom(self, Name, Account):
         """
         Name : 房间名
         Account : 有Account创建房间,然后交给角色实体？
@@ -61,7 +64,7 @@ class RSOperator(KBEngine.Entity):
 
         for Name, Account in self.DemandAccount.items():
             # 找到创建成功房间对应的账户，通知账户创建成功
-            if Name == Room.Name
+            if Name == Room.Name:
                 Account.OnAcountCreateRoom(True, Room.id, Room.Name)
                 # 从字典移除
                 del self.DemandAccount[Name]
@@ -74,3 +77,37 @@ class RSOperator(KBEngine.Entity):
         房间ID
         """
         del self.RoomList[RoomId]
+
+    def GetRoomList(self):
+        """
+        获取房间列表
+        """
+        # 该脚本中RoomList时一个字典
+        # 发给客户端要转换为网络传输使用的类型
+        RoomList = TRoomList()
+        for RoomId, Room in self.RoomList.items():
+            Props = {"RoomId" : RoomId, "Name" : Room.Name}
+            RoomList[RoomId] = TRoomInfo().createFromDict(Props)
+        return RoomList
+
+    def EnterRoom(self, EntityRole, RoomId):
+        """
+        角色进入RoomId对应的房间
+        """
+        # 根据房间ID,得到Room实体
+        Room = self.RoomList[RoomId]
+        if Room is None:
+            ERROR_MSG("RoomMgr::EnterRoom: Room with Id(%i) is none" % (RoomId))
+            return
+        Room.Enter(EntityRole)
+
+    def LeaveRoom(self, EntityId, RoomId):
+        """
+        角色离开房间
+        """
+        # 根据房间ID,得到Room实体
+        Room = self.RoomList[RoomId]
+        if Room is None:
+            ERROR_MSG("RoomMgr::LeaveRoom: Room with Id(%i) is none" % (RoomId))
+            return
+        Room.Leave(EntityId)

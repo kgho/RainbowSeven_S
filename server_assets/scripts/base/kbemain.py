@@ -15,8 +15,8 @@ def onBaseAppReady(isBootstrap):
 
 	# 服务器一启动就创建房间管理器
 	# 如果是第一个启动的baseapp,目前loginapp等都只有一个，没有负载均衡
-	if isBootstrap
-		KBEngine.createEnttiyLocally("RoomMgr",{})
+	if isBootstrap:
+		KBEngine.createEntityLocally("RoomMgr",{})
 
 def onReadyForLogin(isBootstrap):
 	"""

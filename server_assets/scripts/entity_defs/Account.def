@@ -33,6 +33,12 @@
             <Flags> BASE </Flags>
             <Persistent> true </Persistent>
         </RoleList>
+
+        <CurrentRoomID>
+            <Type> UINT64 </Type>
+            <Flags> BASE </Flags>
+            <Default> 0 </Default>
+        </CurrentRoomID>
     </Properties>
 
     <ClientMethods>
@@ -58,7 +64,18 @@
         <!-- 请求干员信息回调 -->
         <OnReqRoleInfo>
             <Arg> ROLE_INFO </Arg>
-        </OnReqRoleInfo>        
+        </OnReqRoleInfo>
+
+        <!-- 客户端请求房间列表回调, 返回房间列表 ROOM_LIST -->
+        <OnReqRoomList>
+            <Arg> ROOM_LIST </Arg>
+        </OnReqRoomList>
+
+        <!-- 客户端请求创建房间回调, 返回创建房间结果和房间信息ROOM_INFO -->
+        <OnCreateRoom>  
+            <Arg> UINT8 </Arg>
+            <Arg> ROOM_INFO </Arg>
+        </OnCreateRoom>        
     </ClientMethods>
 
     <BaseMethods>
@@ -83,6 +100,23 @@
             <Exposed/>
              <Arg>    UINT8    </Arg> <!-- 角色类型RoleType -->
         </ReqRoleInfo>
+
+        <!-- 客户端请求房间列表 -->
+        <ReqRoomList>
+            <Exposed/>
+        </ReqRoomList>
+
+        <!-- 客户端请求创建房间, 传入房间名字 -->
+        <ReqCreateRoom>
+            <Exposed/>
+            <Arg> UNICODE </Arg>
+        </ReqCreateRoom>
+
+        <!-- 客户端请求进入房间, 传入房间id -->
+        <ReqEnterRoom>
+            <Exposed/>
+            <Arg> UINT64 </Arg>
+        </ReqEnterRoom>
     </BaseMethods>
 
     <CellMethods>
