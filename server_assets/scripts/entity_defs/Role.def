@@ -1,0 +1,17 @@
+<root>
+    <Interfaces>
+        <Interface> Character </Interface>
+    </Interfaces>
+
+    <Properties>
+    </Properties>
+
+    <BaseMethods>
+    </BaseMethods>
+
+    <CellMethods>
+    </CellMethods>
+
+    <ClientMethods>
+    </ClientMethods>
+</root>
