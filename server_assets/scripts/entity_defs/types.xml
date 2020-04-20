@@ -76,7 +76,7 @@
                 <Type> UINT16 </Type>
             </Level>
             <State>
-                <Type> UINT8 </Type> <!-- 0:为准备    1:准备 -->
+                <Type> UINT8 </Type> <!-- 0:未准备    1:准备 -->
             </State>
             <Avatar>
                 <Type> UINT16 </Type> <!-- 头像ID -->

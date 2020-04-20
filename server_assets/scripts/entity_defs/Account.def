@@ -76,6 +76,12 @@
             <Arg> UINT8 </Arg>
             <Arg> ROOM_INFO </Arg>
         </OnReqCreateRoom>
+
+        <!-- 客户端请求进入房间回调,返回是否成为房主或者满员了， 该房间玩家信息列表 -->
+        <OnReqEnterRoom>
+            <Arg> UINT8 </Arg>
+            <Arg> PLAYER_LIST </Arg>
+        </OnReqEnterRoom>
     </ClientMethods>
 
     <BaseMethods>

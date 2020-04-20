@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import KBEngine
 from KBEDebug import *
+from PLAYER_INFO import TPlayerInfo, TPlayerList
 
 class Room(KBEngine.Space):
     """
@@ -12,14 +13,38 @@ class Room(KBEngine.Space):
     def __init__(self):
         KBEngine.Space.__init__(self)
 
-        # 玩家字典， key 实体ID ， value base实体 ，cell实体不考虑
+        # 账户字典， key 实体ID ， value base实体 ，cell实体不考虑
         self.EntityDict = {}
+        # 玩家信息字典,玩家名称作为 key
+        self.PlayerList = {}
 
     def Enter(self, EntityAccount):
         """
         # 进入房间
         # EntityAccount : 进入房间的Entity 的 Base 实体
         """
+        # 是否有房主
+        hasMaster = False
+
+        name = "kgho"
+
+        PlayerInfo = TPlayerInfo()
+        PlayerInfo.extend([name, EntityAccount.Level, 0, 0])
+
+        for key, player in self.PlayerList.items():
+            if hasMaster == True:
+                hasMaster = True
+
+        #如果房间里没有玩家，该玩家成为房主
+        if(hasMaster == False):
+            PlayerInfo[2] = 1
+
+        self.PlayerList[name] = PlayerInfo
+
+        length = len(self.PlayerList)
+
+        ERROR_MSG("Room::Enteroom: PlayerCount %i" % length)
+
         # 把实体放入房间的cell空间，调用 self.cell.OnEnter(EntityRole) 也可
         EntityAccount.createCellEntity(self.cell)
         # 将进入的实体保存到玩家字典

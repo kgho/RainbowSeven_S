@@ -14,7 +14,7 @@ class RoomMgr(KBEngine.Entity):
         # 将RoomMgr存储在globalData中，方便获取
         KBEngine.globalData["RoomMgr"] = self
 
-        # 存储所有Room的base实体 在 RoomList 字典中 ，id 作为索引
+        # 存储所有Room的base实体 在 RoomList 字典中 ，id 作为 eky
         self.RoomList = {}
 
         # 正在创建中的房间字典，key ： 房间名  value ： Account
