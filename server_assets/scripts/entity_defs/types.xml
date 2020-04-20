@@ -64,4 +64,36 @@
             </Value>
         </Properties>
     </ROOM_LIST>
+
+    <!-- 玩家信息，进入房间后，需要的数据：玩家名称，状态, 是否是房主 -->
+    <PLAYER_INFO> FIXED_DICT
+        <implementedBy>PLAYER_INFO.PlayerInfoInst</implementedBy>
+        <Properties>
+            <Name>
+                <Type> UNICODE </Type>
+            </Name>
+            <Level>
+                <Type> UINT16 </Type>
+            </Level>
+            <State>
+                <Type> UINT8 </Type> <!-- 0:为准备    1:准备 -->
+            </State>
+            <Avatar>
+                <Type> UINT16 </Type> <!-- 头像ID -->
+            </Avatar>
+            <Master>
+                <Type> UINT16 </Type> <!-- 0:不是房主    1:房主 -->
+            </Master>
+        </Properties>
+    </PLAYER_INFO>
+
+     <!--房间里玩家信息列表-->
+    <PLAYER_LIST> FIXED_DICT
+        <implementedBy>PLAYER_INFO.PLAYER_LIST_PICKLER</implementedBy>
+        <Properties>
+            <Value>
+                <Type> ARRAY <of> PLAYER_INFO </of> </Type>
+            </Value>
+        </Properties>
+    </PLAYER_LIST>
 </root>

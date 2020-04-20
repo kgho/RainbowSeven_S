@@ -1,0 +1,25 @@
+<root>
+
+	<Properties>
+        <Name>
+            <Type>      UNICODE         </Type>
+            <Flags>     ALL_CLIENTS     </Flags>
+            <Persistent>	true	    </Persistent>
+        </Name>
+        <RoleType>
+            <Type>      UINT8         </Type>
+            <Flags>     ALL_CLIENTS     </Flags>
+            <Persistent>	true	    </Persistent>
+        </RoleType>
+	</Properties>
+
+	<ClientMethods>
+	</ClientMethods>
+
+	<BaseMethods>
+	</BaseMethods>
+
+	<CellMethods>
+	</CellMethods>
+
+</root>
