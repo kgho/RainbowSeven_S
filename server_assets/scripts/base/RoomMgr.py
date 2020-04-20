@@ -35,12 +35,12 @@ class RoomMgr(KBEngine.Entity):
             if Room.Name == Name:
                 if Account is not none:
                     # 告诉账户已经有同名的房间
-                    Account.OnAcountCreateRoom(False, 0, Name)
+                    Account.OnAccountReqCreateRoom(False, 0, Name)
                 return
 
         # 判断是否有正在创建中的同名房间请求
         if Name in self.DemandAccount:
-            Account.OnAcountCreateRoom(False, 0, Name)
+            Account.OnAccountReqCreateRoom(False, 0, Name)
             return
 
         if Account is not None:
@@ -65,7 +65,7 @@ class RoomMgr(KBEngine.Entity):
         for Name, Account in self.DemandAccount.items():
             # 找到创建成功房间对应的账户，通知账户创建成功
             if Name == Room.Name:
-                Account.OnAcountCreateRoom(True, Room.id, Room.Name)
+                Account.OnAccountReqCreateRoom(True, Room.id, Room.Name)
                 # 从字典移除
                 del self.DemandAccount[Name]
                 return

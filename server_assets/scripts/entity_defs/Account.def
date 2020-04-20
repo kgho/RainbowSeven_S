@@ -72,10 +72,10 @@
         </OnReqRoomList>
 
         <!-- 客户端请求创建房间回调, 返回创建房间结果和房间信息ROOM_INFO -->
-        <OnCreateRoom>  
+        <OnReqCreateRoom>  
             <Arg> UINT8 </Arg>
             <Arg> ROOM_INFO </Arg>
-        </OnCreateRoom>        
+        </OnReqCreateRoom>        
     </ClientMethods>
 
     <BaseMethods>

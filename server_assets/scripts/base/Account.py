@@ -171,7 +171,7 @@ class Account(KBEngine.Proxy):
         DEBUG_MSG("Account[%i].ReqCreateRoom: RoomName = %s" % (self.id, Name))
         KBEngine.globalData["RoomMgr"].CreateRoom(Name, self)
 
-    def OnAccountCreateRoom(self, Succeed, RoomId, Name):
+    def OnAccountReqCreateRoom(self, Succeed, RoomId, Name):
         """
         创建房间的回调函数
         """
@@ -179,9 +179,9 @@ class Account(KBEngine.Proxy):
         RoomInfo = TRoomInfo().createFromDict(Props)
 
         if Succeed:
-            self.client.OnCreateRoom(0, RoomInfo)
+            self.client.OnReqCreateRoom(0, RoomInfo)
         else:
-            self.client.OnCreateRoom(1, RoomInfo)
+            self.client.OnReqCreateRoom(1, RoomInfo)
 
     def ReqEnterRoom(self, RoomId):
         """
