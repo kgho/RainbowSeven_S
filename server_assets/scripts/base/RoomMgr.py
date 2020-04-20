@@ -3,6 +3,7 @@ import KBEngine
 from KBEDebug import *
 from ROOM_INFO import TRoomInfo, TRoomList
 from Room import Room
+import time
 
 class RoomMgr(KBEngine.Entity):
     """
@@ -21,8 +22,9 @@ class RoomMgr(KBEngine.Entity):
         self.DemandAccount = {}
 
         # 自动创建两个默认房间
-        self.CreateRoom("自动创建-肃清模式-木屋_1", None)
-        self.CreateRoom("自动创建-肃清模式-木屋_2", None)
+        # Props = {"Name" : self.__ACCOUNT_NAME__, "Time" : time.strftime("%a %b %d %H:%M:%S %Y", time.localtime()), "Msg" : Msg}
+        self.CreateRoom("自动创建--肃清模式--木屋_1  "+time.strftime("%Y/%m/%d %H:%M:%S ", time.localtime()), None)
+        self.CreateRoom("自动创建--肃清模式--木屋_2  "+time.strftime("%Y/%m/%d %H:%M:%S ", time.localtime()), None)
 
 
     def CreateRoom(self, Name, Account):
