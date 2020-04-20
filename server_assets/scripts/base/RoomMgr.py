@@ -23,8 +23,8 @@ class RoomMgr(KBEngine.Entity):
 
         # 自动创建两个默认房间
         # Props = {"Name" : self.__ACCOUNT_NAME__, "Time" : time.strftime("%a %b %d %H:%M:%S %Y", time.localtime()), "Msg" : Msg}
-        self.CreateRoom("自动创建--肃清模式--木屋_1  "+time.strftime("%Y/%m/%d %H:%M:%S ", time.localtime()), None)
-        self.CreateRoom("自动创建--肃清模式--木屋_2  "+time.strftime("%Y/%m/%d %H:%M:%S ", time.localtime()), None)
+        self.CreateRoom("服务器自动创建--肃清模式--木屋_1  "+time.strftime("%Y/%m/%d %H:%M:%S ", time.localtime()), None)
+        self.CreateRoom("服务器自动创建--肃清模式--木屋_2  "+time.strftime("%Y/%m/%d %H:%M:%S ", time.localtime()), None)
 
 
     def CreateRoom(self, Name, Account):
@@ -92,20 +92,20 @@ class RoomMgr(KBEngine.Entity):
             RoomList[RoomId] = TRoomInfo().createFromDict(Props)
         return RoomList
 
-    def EnterRoom(self, EntityRole, RoomId):
+    def EnterRoom(self, EntityAccount, RoomId):
         """
-        角色进入RoomId对应的房间
+        账户进入RoomId对应的房间
         """
         # 根据房间ID,得到Room实体
         Room = self.RoomList[RoomId]
         if Room is None:
             ERROR_MSG("RoomMgr::EnterRoom: Room with Id(%i) is none" % (RoomId))
             return
-        Room.Enter(EntityRole)
+        Room.Enter(EntityAccount)
 
     def LeaveRoom(self, EntityId, RoomId):
         """
-        角色离开房间
+        账户离开房间
         """
         # 根据房间ID,得到Room实体
         Room = self.RoomList[RoomId]

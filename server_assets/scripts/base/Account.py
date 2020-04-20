@@ -190,4 +190,12 @@ class Account(KBEngine.Proxy):
         DEBUG_MSG("Account[%i].ReqEnterRoom: RoomId = %i " % (self.id, RoomId))
         # 保存当前所在房间id
         self.CurrentRoomID = RoomId
+        # 账户进入房间
+        KBEngine.globalData["RoomMgr"].EnterRoom(self, self.CurrentRoomID)
+
+    def onGetCell(self):
+        DEBUG_MSG("Account.Base[%i].onGetCell: " % (self.id))
+
+    def onLoseCell(self):
+        pass
 

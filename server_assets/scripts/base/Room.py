@@ -15,31 +15,31 @@ class Room(KBEngine.Space):
         # 玩家字典， key 实体ID ， value base实体 ，cell实体不考虑
         self.EntityDict = {}
 
-    def Enter(self, EntityRole):
+    def Enter(self, EntityAccount):
         """
         # 进入房间
-        # EntityRole : 进入房间的Entity 的 Base 实体
+        # EntityAccount : 进入房间的Entity 的 Base 实体
         """
         # 把实体放入房间的cell空间，调用 self.cell.OnEnter(EntityRole) 也可
-        EntityRole.crateCellEntity(self.cell)
+        EntityAccount.createCellEntity(self.cell)
         # 将进入的实体保存到玩家字典
-        self.EntityDict[EntityRole.id] = EntityRole
+        self.EntityDict[EntityAccount.id] = EntityAccount
 
     def Leave(self, EntityId):
         """
         # 离开房间(Base实体离开)，如果存在cell实体，也要删除
         """
         # 获取玩家
-        EntityRole = self.EntityDict[EntityId]
+        EntityAccount = self.EntityDict[EntityId]
         # 把玩家移除字典
         del self.EntityDict[EntityId]
         # 销毁玩家cell实体
         # 如果base实体不为空
-        if EntityRole is not None:
+        if EntityAccount is not None:
             # 如果cell实体不为空
-            if EntityRole.cell is not None:
+            if EntityAccount.cell is not None:
                 #通过base 实体调用方法 销毁 cell 实体 (销毁后回调该实体的 OnLose方法)
-                EntityRole.destroyCellEntity()
+                EntityAccount.destroyCellEntity()
 
     def onGetCell(self):
         """
