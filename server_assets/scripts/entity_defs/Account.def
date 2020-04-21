@@ -72,7 +72,7 @@
             <Arg> ROOM_LIST </Arg>
         </OnReqRoomList>
 
-        <!-- 客户端请求创建房间回调, 返回创建房间结果和房间信息ROOM_INFO -->
+        <!-- 客户端请求创建房间回调, 返回创建房间结果 0:成功，1:之前退出后信息还没处理完，进入失败。和房间信息ROOM_INFO -->
         <OnReqCreateRoom>
             <Arg> UINT8 </Arg>
             <Arg> ROOM_INFO </Arg>

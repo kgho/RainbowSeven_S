@@ -23,9 +23,20 @@ class Room(KBEngine.Space):
         # 进入房间
         # EntityAccount : 进入房间的Entity 的 Base 实体
         """
-        
         ERROR_MSG("Room::Enteroom: Name %s" % EntityAccount.__ACCOUNT_NAME__)
 
+        # 客户端在房间直接退出游戏了，cell实体还没来得及销毁，此时不能进入房间
+        if EntityAccount.cell is not None:
+            PlayerList = TPlayerList()
+            for Name, Player in self.PlayerList.items():
+                Props = {"Name" : Player[0], "Level" : Player[1], "State" : Player[2], "Avatar" : Player[3], "Master" : Player[4]}
+                PlayerList[Name] = TPlayerInfo().createFromDict(Props)
+
+            EntityAccount.client.OnReqEnterRoom(1, PlayerList)
+            ERROR_MSG("Room::Enteroom: Failed.")
+            return
+
+        ERROR_MSG("Room::Enteroom: Successful.")
         # 假设当前玩家是房主
         isMaster = 1
 
@@ -42,7 +53,7 @@ class Room(KBEngine.Space):
 
         PlayerList = TPlayerList()
         for Name, Player in self.PlayerList.items():
-            Props = {"Name" : Name, "Level" : EntityAccount.Level, "State" : 0, "Avatar" : 0, "Master" : isMaster}
+            Props = {"Name" : Name, "Level" : Player[1], "State" : Player[2], "Avatar" : Player[3], "Master" : Player[4]}
             PlayerList[Name] = TPlayerInfo().createFromDict(Props)
 
         ERROR_MSG("Room::Enteroom: PlayerCount %i" % len(PlayerList))
