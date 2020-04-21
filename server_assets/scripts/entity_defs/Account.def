@@ -83,6 +83,11 @@
             <Arg> UINT8 </Arg>
             <Arg> PLAYER_LIST </Arg>
         </OnReqEnterRoom>
+
+        <!-- 客户端请求离开房间回调 -->
+        <OnReqLeaveRoom>
+            <Arg> UINT8 </Arg>
+        </OnReqLeaveRoom>
     </ClientMethods>
 
     <BaseMethods>

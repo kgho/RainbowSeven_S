@@ -8,6 +8,9 @@ class Account(KBEngine.Proxy):
     def __init__(self):
         KBEngine.Proxy.__init__(self)
 
+        # 用于判断是请求离开的房间，还是强退游戏离开的
+        self.reqLeaveRoom = False
+
     def onTimer(self, id, userArg):
         """
         KBEngine method.
@@ -204,10 +207,20 @@ class Account(KBEngine.Proxy):
     def onLoseCell(self):
         # cell实体销毁，说明强退客户端了，或退出房间了
         ERROR_MSG("Account[%i].onLoseCell:" % self.id)
-        self.destroy()
+
+        # 如果是强退的，销毁base，如果不是，返回退出房间消息给客户端
+        if self.reqLeaveRoom:
+            if self.client is not None
+                self.client.OnReqLeaveRoom(0)
+            else:
+                self.destroy()
+        else:
+            self.destroy()
 
     def ReqLeaveRoom(self):
         if self.cell is not None:
+            self.reqLeaveRoom = True
             ERROR_MSG("Account[%i].ReqLeaveRoom:" % self.id)
+            KBEngine.globalData["RoomMgr"].LeaveRoom(self.id, self.CurrentRoomID)
 
 
