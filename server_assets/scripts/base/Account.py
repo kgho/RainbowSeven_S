@@ -38,7 +38,12 @@ class Account(KBEngine.Proxy):
         KBEngine method.
         客户端对应实体已经销毁
         """
-        DEBUG_MSG("Account[%i].onClientDeath:" % self.id)
+
+        if self.cell is not None:
+            self.destroyCellEntity()
+            return
+
+        ERROR_MSG("Account[%i].onClientDeath:" % self.id)
         self.destroy()
 
     def ReqAccountInfo(self):
@@ -197,5 +202,12 @@ class Account(KBEngine.Proxy):
         DEBUG_MSG("Account.Base[%i].onGetCell: " % (self.id))
 
     def onLoseCell(self):
-        pass
+        ERROR_MSG("Account[%i].onLoseCell:" % self.id)
+        self.destroy()
+
+    def ReqLeaveRoom(self):
+        if self.cell is not None:
+            ERROR_MSG("Account[%i].ReqLeaveRoom:" % self.id)
+            KBEngine.globalData["RoomMgr"].LeaveRoom(self.id, self.CurrentRoomID)
+
 

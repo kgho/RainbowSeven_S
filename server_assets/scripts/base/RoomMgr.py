@@ -84,7 +84,7 @@ class RoomMgr(KBEngine.Entity):
         """
         获取房间列表
         """
-        # 该脚本中RoomList时一个字典
+        # 该脚本中RoomList是一个字典
         # 发给客户端要转换为网络传输使用的类型
         RoomList = TRoomList()
         for RoomId, Room in self.RoomList.items():
@@ -107,6 +107,7 @@ class RoomMgr(KBEngine.Entity):
         """
         账户离开房间
         """
+        ERROR_MSG("RoomMgr::LeaveRoom:")
         # 根据房间ID,得到Room实体
         Room = self.RoomList[RoomId]
         if Room is None:

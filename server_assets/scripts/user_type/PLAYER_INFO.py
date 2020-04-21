@@ -12,12 +12,13 @@ class TPlayerInfo(list):
             "Name" : self[0],
             "Level" : self[1],
             "State" : self[2],
-            "Avatar" : self[3]
+            "Avatar" : self[3],
+            "Master" : self[4]
         }
         return Data
 
     def createFromDict(self, DictData):
-        self.extend([DictData["Name"], DictData["Level"], DictData["State"], DictData["Avatar"]])
+        self.extend([DictData["Name"], DictData["Level"], DictData["State"], DictData["Avatar"], DictData["Master"]])
         return self
 
 #PLAYER_INFO序列化和反序列化
@@ -55,7 +56,7 @@ class TPlayerList(dict):
 
     def createFromDict(self, DictData):
         for data in DictData["Value"]:
-            Prop = {"Name" : data[0], "Level" : data[1], "State" : data[2], "Avatar" : data[3]}
+            Prop = {"Name" : data[0], "Level" : data[1], "State" : data[2], "Avatar" : data[3], "Master" : data[4]}
             # 键 : 数据库id  --> 值 : TPlayerInfo
             self[data[0]] = PlayerInfoInst.createObjFromDict(Prop)
         return self

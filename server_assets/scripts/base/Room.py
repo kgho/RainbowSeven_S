@@ -15,7 +15,7 @@ class Room(KBEngine.Space):
 
         # 账户字典， key 实体ID ， value base实体 ，cell实体不考虑
         self.EntityDict = {}
-        # 玩家信息字典,玩家名称作为 key
+        # 玩家信息字典,玩家名称作为 key, 玩家信息作为 value
         self.PlayerList = {}
 
     def Enter(self, EntityAccount):
@@ -23,27 +23,31 @@ class Room(KBEngine.Space):
         # 进入房间
         # EntityAccount : 进入房间的Entity 的 Base 实体
         """
-        # 是否有房主
-        hasMaster = False
+        
+        ERROR_MSG("Room::Enteroom: Name %s" % EntityAccount.__ACCOUNT_NAME__)
 
-        name = "kgho"
+        # 假设当前玩家是房主
+        isMaster = 1
 
-        PlayerInfo = TPlayerInfo()
-        PlayerInfo.extend([name, EntityAccount.Level, 0, 0])
+        # 如果房间有房主了
+        for AccountName,PlayerInfo in self.PlayerList.items():
+            if PlayerInfo[4] == 1:
+                isMaster = 0
 
-        for key, player in self.PlayerList.items():
-            if hasMaster == True:
-                hasMaster = True
+        Props = {"Name" : EntityAccount.__ACCOUNT_NAME__, "Level" : EntityAccount.Level, "State" : 0, "Avatar" : 0, "Master" : isMaster}
 
-        #如果房间里没有玩家，该玩家成为房主
-        if(hasMaster == False):
-            PlayerInfo[2] = 1
+        self.PlayerList[EntityAccount.__ACCOUNT_NAME__] = TPlayerInfo().createFromDict(Props)
 
-        self.PlayerList[name] = PlayerInfo
+        ERROR_MSG("Room::Enteroom: EntityDictCount %i" % len(self.EntityDict))
 
-        length = len(self.PlayerList)
+        PlayerList = TPlayerList()
+        for Name, Player in self.PlayerList.items():
+            Props = {"Name" : Name, "Level" : EntityAccount.Level, "State" : 0, "Avatar" : 0, "Master" : isMaster}
+            PlayerList[Name] = TPlayerInfo().createFromDict(Props)
 
-        ERROR_MSG("Room::Enteroom: PlayerCount %i" % length)
+        ERROR_MSG("Room::Enteroom: PlayerCount %i" % len(PlayerList))
+
+        EntityAccount.client.OnReqEnterRoom(0, PlayerList)
 
         # 把实体放入房间的cell空间，调用 self.cell.OnEnter(EntityRole) 也可
         EntityAccount.createCellEntity(self.cell)
@@ -54,6 +58,7 @@ class Room(KBEngine.Space):
         """
         # 离开房间(Base实体离开)，如果存在cell实体，也要删除
         """
+        ERROR_MSG("Room::Leave:")
         # 获取玩家
         EntityAccount = self.EntityDict[EntityId]
         # 把玩家移除字典
@@ -80,4 +85,4 @@ class Room(KBEngine.Space):
         # 通知RoomMgr，房间销毁
         KBEngine.globalData["RoomMgr"].OnRoomGetCell(self)
         # 销毁cell实体，同时销毁base实体？
-        # self.destroy()
+        self.destroy()

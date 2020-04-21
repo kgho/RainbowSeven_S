@@ -39,6 +39,7 @@
             <Flags> BASE </Flags>
             <Default> 0 </Default>
         </CurrentRoomID>
+
     </Properties>
 
     <ClientMethods>
@@ -123,6 +124,11 @@
             <Exposed/>
             <Arg> UINT64 </Arg>
         </ReqEnterRoom>
+
+        <!-- 客户端请求离开房间, 传入房间id -->
+        <ReqLeaveRoom>
+            <Exposed/>
+        </ReqLeaveRoom>
     </BaseMethods>
 
     <CellMethods>
