@@ -104,8 +104,34 @@ class Room(KBEngine.Space):
         ERROR_MSG("Room::Leave:")
         # 获取玩家
         EntityAccount = self.EntityDict[EntityId]
+
+        # 要删除的玩家名称
+        delPlayerName = ""
+        isBlue = True
+
+        for Name, Player in self.PlayerListBlue.items():
+            if Name == EntityAccount.__ACCOUNT_NAME__:
+                delPlayerName = Name
+
+        for Name, Player in self.PlayerListRed.items():
+            if Name == EntityAccount.__ACCOUNT_NAME__:
+                delPlayerName = Name
+                isBlue = False
+
+        ERROR_MSG("Room::Leave--> Name:%s , isBlue:%s" % (delPlayerName, isBlue))
+
+        if isBlue:
+            del self.PlayerListBlue[delPlayerName]
+        else:
+            del self.PlayerListRed[delPlayerName]
+
         # 把玩家移除字典
         del self.EntityDict[EntityId]
+
+        # 有玩家退出了,通知其它玩家更新房间玩家信息
+        for ID, Account in self.EntityDict.items():
+            Account.client.OnReqEnterRoom(0, self.returnPlayerList(self.PlayerListBlue), self.returnPlayerList(self.PlayerListRed))
+
         # 销毁玩家cell实体
         # 如果base实体不为空
         if EntityAccount is not None:
@@ -135,10 +161,19 @@ class Room(KBEngine.Space):
         for Name, Player in self.PlayerListBlue.items():
             Props = {"Name" : Player[0], "Level" : Player[1], "State" : Player[2], "Avatar" : Player[3], "Master" : Player[4]}
             PlayerListBlue[Name] = TPlayerInfo().createFromDict(Props)
+
         PlayerListRed = TPlayerList()
         for Name, Player in self.PlayerListRed.items():
             Props = {"Name" : Player[0], "Level" : Player[1], "State" : Player[2], "Avatar" : Player[3], "Master" : Player[4]}
             PlayerListRed[Name] = TPlayerInfo().createFromDict(Props)
-        ERROR_MSG("Room::Enteroom: EntityDictCount Room Full")
+
         EntityAccount.client.OnReqEnterRoom(2, PlayerListBlue, PlayerListRed)
         ERROR_MSG("Room::Enteroom: Full.")
+
+    def returnPlayerList(self, PlayerList):
+        tempPlayerList = TPlayerList()
+        for Name, Player in PlayerList.items():
+            Props = {"Name" : Player[0], "Level" : Player[1], "State" : Player[2], "Avatar" : Player[3], "Master" : Player[4]}
+            tempPlayerList[Name] = TPlayerInfo().createFromDict(Props)
+        ERROR_MSG("Room::Enteroom: returnPlayerList:%i" % len(tempPlayerList))
+        return tempPlayerList
