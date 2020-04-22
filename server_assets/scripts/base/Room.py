@@ -112,18 +112,21 @@ class Room(KBEngine.Space):
         # 获取玩家
         EntityAccount = self.EntityDict[EntityId]
 
-        # 要删除的玩家名称
+        # 要删除的玩家名称,离开房间的是否是房主
         delPlayerName = ""
         isBlue = True
+        isMaster = 0
 
         for Name, Player in self.PlayerListBlue.items():
             if Name == EntityAccount.__ACCOUNT_NAME__:
                 delPlayerName = Name
+                isMaster = Player[4]
 
         for Name, Player in self.PlayerListRed.items():
             if Name == EntityAccount.__ACCOUNT_NAME__:
                 delPlayerName = Name
                 isBlue = False
+                isMaster = Player[4]
 
         ERROR_MSG("Room::Leave--> Name:%s , isBlue:%s" % (delPlayerName, isBlue))
 
@@ -134,6 +137,21 @@ class Room(KBEngine.Space):
 
         # 把玩家移除字典
         del self.EntityDict[EntityId]
+
+        # 如果离开的是房主，让列表里第一名玩家成为房主
+        if isMaster == 1:
+            if len(self.PlayerListBlue) > 0:
+                result=[]
+                for k,v in self.PlayerListBlue.items():
+                    result.append(k)
+                self.PlayerListBlue[result[0]][4] = 1
+                ERROR_MSG("Room::Leave--> BlueTeam:%s is Master." % result[0])
+            elif len(self.PlayerListRed) > 0:
+                result=[]
+                for k,v in self.PlayerListRed.items():
+                    result.append(k)
+                self.PlayerListRed[result[0]][4] = 1
+                ERROR_MSG("Room::Leave--> RedTeam:%s is Master." % result[0])
 
         # 有玩家退出了,通知其它玩家更新房间玩家信息
         for ID, Account in self.EntityDict.items():
