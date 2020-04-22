@@ -97,6 +97,16 @@
         <OnReqLeaveRoom>
             <Arg> UINT8 </Arg>
         </OnReqLeaveRoom>
+
+        <!-- 客户端请求修改准备状态回调， 将服务器保存的状态返回给客户端 -->
+        <OnReqChangeState>
+            <Arg> UINT8 </Arg>
+        </OnReqChangeState>
+    
+        <!-- 通知房主客户端全员准备，0：全部准备，1：否  -->
+        <OnAllReady>
+            <Arg> UINT8 </Arg>
+        </OnAllReady>
     </ClientMethods>
 
     <BaseMethods>
@@ -143,6 +153,17 @@
         <ReqLeaveRoom>
             <Exposed/>
         </ReqLeaveRoom>
+
+        <!-- 客户端请求修改准备状态， 0：取消准备， 1：准备。服务端收到请求修改该客户端状态，然后把房间所有玩家信息返还给客户端 -->
+        <ReqChangeState>
+            <Exposed/>
+            <Arg> UINT8 </Arg>
+        </ReqChangeState>
+
+        <!-- 房主请求开始游戏 -->
+        <ReqStartGame>
+            <Arg> UINT8 </Arg>
+        </ReqStartGame>
     </BaseMethods>
 
     <CellMethods>

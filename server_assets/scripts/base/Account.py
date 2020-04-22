@@ -208,13 +208,26 @@ class Account(KBEngine.Proxy):
         # cell实体销毁，说明强退客户端了，或退出房间了
         ERROR_MSG("Account[%i].onLoseCell:" % self.id)
 
+        if self.client is not None:
+            ERROR_MSG("client is not None")
+        else:
+            ERROR_MSG("client is None")
+
+        if self.reqLeaveRoom:
+            ERROR_MSG("reqLeaveRoom True")
+        else:
+            ERROR_MSG("reqLeaveRoom False")
+
         # 如果是强退的，销毁base，如果不是，返回退出房间消息给客户端
         if self.reqLeaveRoom:
             if self.client is not None:
+                DEBUG_MSG("Account[%i].onLoseCell: 1 " % self.id)
                 self.client.OnReqLeaveRoom(0)
             else:
+                DEBUG_MSG("Account[%i].onLoseCell: 2 " % self.id)
                 self.destroy()
         else:
+            DEBUG_MSG("Account[%i].onLoseCell: 3 " % self.id)
             self.destroy()
 
     def ReqLeaveRoom(self):
@@ -222,5 +235,12 @@ class Account(KBEngine.Proxy):
             self.reqLeaveRoom = True
             ERROR_MSG("Account[%i].ReqLeaveRoom:" % self.id)
             KBEngine.globalData["RoomMgr"].LeaveRoom(self.id, self.CurrentRoomID)
+
+    def ReqChangeState(self, state):
+        KBEngine.globalData["RoomMgr"].PlayerChangeState(self.id, self.CurrentRoomID, state)
+
+    def ReqStartGame(self, code):
+        DEBUG_MSG("Account[%i].ReqStartGame: Code = %s" % (self.id, code))
+
 
 
