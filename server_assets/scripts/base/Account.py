@@ -53,9 +53,9 @@ class Account(KBEngine.Proxy):
         """
         请求账户信息：等级，经验，声望值，金币
         """
-        DEBUG_MSG("Account[%i]::ReqAccountInfo: Level=%i, Exp=%i, Fame=%i, Coin=%i." % (self.id, self.Level, self.Exp, self.Fame, self.Coin))
+        DEBUG_MSG("Account[%i]::ReqAccountInfo: Name=%s, Level=%i, Exp=%i, Fame=%i, Coin=%i." % (self.id, self.__ACCOUNT_NAME__, self.Level, self.Exp, self.Fame, self.Coin))
 
-        self.client.OnReqAccountInfo(self.Level, self.Exp, self.Fame, self.Coin)
+        self.client.OnReqAccountInfo(self.__ACCOUNT_NAME__, self.Level, self.Exp, self.Fame, self.Coin)
 
     def ReqRoleInfo(self, RoleType):
         """

@@ -1,5 +1,12 @@
 <root>
     <Properties>
+        <Name> <!--昵称，暂时用账户名当昵称-->
+            <Type> UNICODE </Type>
+            <Flags> BASE_AND_CLIENT </Flags>
+            <Default> Kgho </Default>
+            <Persistent> true </Persistent>
+        </Name>
+
         <Level>
             <Type> UINT16 </Type>
             <Flags> BASE_AND_CLIENT </Flags>
@@ -45,6 +52,7 @@
     <ClientMethods>
         <!-- 请求账户信息回调 -->
         <OnReqAccountInfo>
+            <Arg> UNICODE </Arg> 
             <Arg> UINT16 </Arg> 
             <Arg> UINT64 </Arg>
             <Arg> UINT64 </Arg>

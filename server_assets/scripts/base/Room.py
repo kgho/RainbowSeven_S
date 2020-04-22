@@ -76,6 +76,7 @@ class Room(KBEngine.Space):
 
         ERROR_MSG("Room::Enteroom: EntityDictCount %i" % len(self.EntityDict))
 
+        """
         PlayerListBlue = TPlayerList()
         for Name, Player in self.PlayerListBlue.items():
             Props = {"Name" : Name, "Level" : Player[1], "State" : Player[2], "Avatar" : Player[3], "Master" : Player[4]}
@@ -89,13 +90,19 @@ class Room(KBEngine.Space):
             PlayerListRed[Name] = TPlayerInfo().createFromDict(Props)
 
         ERROR_MSG("Room::Enteroom: PlayerRedCount %i" % len(PlayerListRed))
+        """
 
-        EntityAccount.client.OnReqEnterRoom(0, PlayerListBlue, PlayerListRed)
+        self.EntityDict[EntityAccount.id] = EntityAccount
+
+        for ID, Account in self.EntityDict.items():
+            Account.client.OnReqEnterRoom(0, self.returnPlayerList(self.PlayerListBlue), self.returnPlayerList(self.PlayerListRed))
+
+        # EntityAccount.client.OnReqEnterRoom(0, PlayerListBlue, PlayerListRed)
 
         # 把实体放入房间的cell空间，调用 self.cell.OnEnter(EntityRole) 也可
         EntityAccount.createCellEntity(self.cell)
         # 将进入的实体保存到玩家字典
-        self.EntityDict[EntityAccount.id] = EntityAccount
+        
 
     def Leave(self, EntityId):
         """
