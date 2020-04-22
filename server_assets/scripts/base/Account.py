@@ -210,7 +210,7 @@ class Account(KBEngine.Proxy):
 
         # 如果是强退的，销毁base，如果不是，返回退出房间消息给客户端
         if self.reqLeaveRoom:
-            if self.client is not None
+            if self.client is not None:
                 self.client.OnReqLeaveRoom(0)
             else:
                 self.destroy()

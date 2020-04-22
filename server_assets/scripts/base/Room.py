@@ -16,7 +16,9 @@ class Room(KBEngine.Space):
         # 账户字典， key 实体ID ， value base实体 ，cell实体不考虑
         self.EntityDict = {}
         # 玩家信息字典,玩家名称作为 key, 玩家信息作为 value
-        self.PlayerList = {}
+        # 玩家分为 蓝 红 两队,每队最多5名玩家
+        self.PlayerListBlue = {}
+        self.PlayerListRed = {}
 
     def Enter(self, EntityAccount):
         """
@@ -27,38 +29,68 @@ class Room(KBEngine.Space):
 
         # 客户端在房间直接退出游戏了，cell实体还没来得及销毁，此时不能进入房间
         if EntityAccount.cell is not None:
-            PlayerList = TPlayerList()
-            for Name, Player in self.PlayerList.items():
+            PlayerListBlue = TPlayerList()
+            for Name, Player in self.PlayerListBlue.items():
                 Props = {"Name" : Player[0], "Level" : Player[1], "State" : Player[2], "Avatar" : Player[3], "Master" : Player[4]}
-                PlayerList[Name] = TPlayerInfo().createFromDict(Props)
+                PlayerListBlue[Name] = TPlayerInfo().createFromDict(Props)
 
-            EntityAccount.client.OnReqEnterRoom(1, PlayerList)
+            PlayerListRed = TPlayerList()
+            for Name, Player in self.PlayerListRed.items():
+                Props = {"Name" : Player[0], "Level" : Player[1], "State" : Player[2], "Avatar" : Player[3], "Master" : Player[4]}
+                PlayerListRed[Name] = TPlayerInfo().createFromDict(Props)
+
+            EntityAccount.client.OnReqEnterRoom(1, PlayerListBlue, PlayerListRed)
             ERROR_MSG("Room::Enteroom: Failed.")
             return
 
         ERROR_MSG("Room::Enteroom: Successful.")
+
         # 假设当前玩家是房主
         isMaster = 1
 
-        # 如果房间有房主了
-        for AccountName,PlayerInfo in self.PlayerList.items():
+        # 蓝队是否有房主
+        for AccountName,PlayerInfo in self.PlayerListBlue.items():
+            if PlayerInfo[4] == 1:
+                isMaster = 0
+
+        # 红队是否有房主
+        for AccountName,PlayerInfo in self.PlayerListRed.items():
             if PlayerInfo[4] == 1:
                 isMaster = 0
 
         Props = {"Name" : EntityAccount.__ACCOUNT_NAME__, "Level" : EntityAccount.Level, "State" : 0, "Avatar" : 0, "Master" : isMaster}
 
-        self.PlayerList[EntityAccount.__ACCOUNT_NAME__] = TPlayerInfo().createFromDict(Props)
+        if len(self.PlayerListBlue) <= len(self.PlayerListRed):
+            if len(self.PlayerListBlue)<5:
+                self.PlayerListBlue[EntityAccount.__ACCOUNT_NAME__] = TPlayerInfo().createFromDict(Props)
+            else:
+                self.returnOnReqEnterRoomFull(EntityAccount)
+                return
+        else:
+            if len(self.PlayerListRed) < 5:
+                self.PlayerListRed[EntityAccount.__ACCOUNT_NAME__] = TPlayerInfo().createFromDict(Props)
+            else:
+                self.returnOnReqEnterRoomFull(EntityAccount)
+                return
+
 
         ERROR_MSG("Room::Enteroom: EntityDictCount %i" % len(self.EntityDict))
 
-        PlayerList = TPlayerList()
-        for Name, Player in self.PlayerList.items():
+        PlayerListBlue = TPlayerList()
+        for Name, Player in self.PlayerListBlue.items():
             Props = {"Name" : Name, "Level" : Player[1], "State" : Player[2], "Avatar" : Player[3], "Master" : Player[4]}
-            PlayerList[Name] = TPlayerInfo().createFromDict(Props)
+            PlayerListBlue[Name] = TPlayerInfo().createFromDict(Props)
 
-        ERROR_MSG("Room::Enteroom: PlayerCount %i" % len(PlayerList))
+        ERROR_MSG("Room::Enteroom: PlayerBlueCount %i" % len(PlayerListBlue))
 
-        EntityAccount.client.OnReqEnterRoom(0, PlayerList)
+        PlayerListRed = TPlayerList()
+        for Name, Player in self.PlayerListRed.items():
+            Props = {"Name" : Name, "Level" : Player[1], "State" : Player[2], "Avatar" : Player[3], "Master" : Player[4]}
+            PlayerListRed[Name] = TPlayerInfo().createFromDict(Props)
+
+        ERROR_MSG("Room::Enteroom: PlayerRedCount %i" % len(PlayerListRed))
+
+        EntityAccount.client.OnReqEnterRoom(0, PlayerListBlue, PlayerListRed)
 
         # 把实体放入房间的cell空间，调用 self.cell.OnEnter(EntityRole) 也可
         EntityAccount.createCellEntity(self.cell)
@@ -97,3 +129,16 @@ class Room(KBEngine.Space):
         KBEngine.globalData["RoomMgr"].OnRoomGetCell(self)
         # 销毁cell实体，同时销毁base实体？
         self.destroy()
+
+    def returnOnReqEnterRoomFull(self, EntityAccount):
+        PlayerListBlue = TPlayerList()
+        for Name, Player in self.PlayerListBlue.items():
+            Props = {"Name" : Player[0], "Level" : Player[1], "State" : Player[2], "Avatar" : Player[3], "Master" : Player[4]}
+            PlayerListBlue[Name] = TPlayerInfo().createFromDict(Props)
+        PlayerListRed = TPlayerList()
+        for Name, Player in self.PlayerListRed.items():
+            Props = {"Name" : Player[0], "Level" : Player[1], "State" : Player[2], "Avatar" : Player[3], "Master" : Player[4]}
+            PlayerListRed[Name] = TPlayerInfo().createFromDict(Props)
+        ERROR_MSG("Room::Enteroom: EntityDictCount Room Full")
+        EntityAccount.client.OnReqEnterRoom(2, PlayerListBlue, PlayerListRed)
+        ERROR_MSG("Room::Enteroom: Full.")
