@@ -127,6 +127,16 @@ class RoomMgr(KBEngine.Entity):
             return
         Room.PlayerChangeState(EntityId, state)
 
-    def RoomEnterGame(self, RoomId, code):
+    def RoomStartGame(self, RoomId, code):
         Room = self.RoomList[RoomId]
-        Room.EnterGame(code)
+        if Room is None:
+            ERROR_MSG("RoomMgr::RoomStartGame: Room with Id(%i)  is none" % (RoomId))
+            return
+        Room.StartGame(code)
+
+    def RoomEnterGame(self, EntityRole, RoomId):
+        Room = self.RoomList[RoomId]
+        if Room is None:
+            ERROR_MSG("RoomMgr::RoomEnterGame: Room with Id(%i)  is none" % (RoomId))
+            return
+        Room.EnterGame(EntityRole)

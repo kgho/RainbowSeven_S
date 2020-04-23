@@ -234,13 +234,55 @@ class Account(KBEngine.Proxy):
                 self.CurrentRoleID = info[0]
                 self.client.OnReqSelectRole(0, RoleType)
 
-
     def ReqStartGame(self, code):
         DEBUG_MSG("Account[%i].ReqStartGame: Code = %s" % (self.id, code))
-        KBEngine.globalData["RoomMgr"].RoomEnterGame(self.CurrentRoomID, code)
+        KBEngine.globalData["RoomMgr"].RoomStartGame(self.CurrentRoomID, code)
 
-    def ReqEnterGame(self, code):
-        DEBUG_MSG("Account[%i].ReqEnterGame: Code = %s" % (self.id, code))
-        self.client.OnReqEnterGame(code)
+    def ReqEnterGame(self, RoomId):
+        DEBUG_MSG("Account[%i].ReqEnterGame: Code = %i" % (self.id, RoomId))
+        # self.CurrentRoomID = RoomId
+        # self.client.OnReqEnterGame(code)
+        # 从数据库创建选中的角色
+        KBEngine.createEntityFromDBID("Role", self.CurrentRoleID, self._OnRoleCreated)
+
+    def _OnRoleCreated(self, BaseRef, Dbid, WasActive):
+        """
+        进入游戏从数据库创建选中的角色的回调函数
+        :param BaseRef:
+        :param Dbid:
+        :param WasActive:
+        """
+        if WasActive:
+            ERROR_MSG("Account[%i]::_OnRoleCreated: this role is in world" % self.id)
+            return
+
+        if BaseRef is None:
+            ERROR_MSG("Account[%i]::_OnRoleCreated: this role create from DB is not Exit" % self.id)
+            return
+
+        # 获取干员角色实体
+        Role = KBEngine.entities.get(BaseRef.id)
+
+        if Role is None:
+            ERROR_MSG("Account[%i]::_OnRoleCreated: when role was created, it died as well!" % self.id)
+            return
+
+        if self.isDestroyed:
+            ERROR_MSG("Account::_OnRoleCreated:(%i): i dead, will the destroy of role!" % (self.id))
+            Role.destroy()
+            return
+
+        DEBUG_MSG('Account::_OnRoleCreated:(%i) enter room game:  %s, %i' % (self.id, Role.cellData["RoleType"], Role.databaseID))
+
+        # 保存干员角色实体到本地
+        self.ActiveRole = Role
+        # 移交客户端代理到干员角色, 移交客户端代理之后, 服务端的Account实体不会销毁, 但是客户端的Account实体会销毁,
+        # 同时客户端只能和角色实体进行联网交互（只能掉角色实体的方法）
+        self.giveClientTo(Role)
+        # 保存Acoount实体到Role
+        Role.AccountEntity = self
+        # 干员角色进入场景
+        KBEngine.globalData["RoomMgr"].RoomEnterGame(Role, self.CurrentRoomID)
+
 
 

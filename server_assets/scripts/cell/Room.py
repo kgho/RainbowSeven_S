@@ -9,4 +9,4 @@ class Room(KBEngine.Space):
     def __init__(self):
         KBEngine.Space.__init__(self)
 
-        ERROR_MSG("Room.Cell::__init__.")
+        ERROR_MSG("Room.Cell::__init__. self.spaceID: %i" % self.spaceID )

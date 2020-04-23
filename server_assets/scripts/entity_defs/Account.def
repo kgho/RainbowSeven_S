@@ -190,17 +190,18 @@
             <Arg> UINT8 </Arg> <!-- 角色类型RoleType -->
         </ReqSelectRole>
 
-        <!-- 玩家请求 进入 游戏 -->
-        <ReqEnterGame>
-            <Exposed/>
-            <Arg> UINT8 </Arg>
-        </ReqEnterGame>
 
-        <!-- 房主请求 开始 游戏 -->
+        <!-- 房主请求 开始 游戏，通知所有客户端 -->
         <ReqStartGame>
             <Exposed/>
-            <Arg> UINT8 </Arg>
+            <Arg> UINT8 </Arg> 
         </ReqStartGame>
+
+        <!-- 玩家请求 进入 游戏，进入地图 -->
+        <ReqEnterGame>
+            <Exposed/>
+            <Arg> UINT64 </Arg> <!-- 房间id -->
+        </ReqEnterGame>
     </BaseMethods>
 
     <CellMethods>

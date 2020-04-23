@@ -20,6 +20,9 @@ class Room(KBEngine.Space):
         self.PlayerListBlue = {}
         self.PlayerListRed = {}
 
+        # 玩家选择干员后的角色字典
+        self.RoleEntityDict = {}
+
         # 房主在字典的 key
         self.masterEntityKey = 0
 
@@ -247,10 +250,21 @@ class Room(KBEngine.Space):
             if len(self.EntityDict) > 0:
                 self.EntityDict[self.masterEntityKey].client.OnAllReady(1)
 
-    def EnterGame(self, code):
+    # 房主请求开始游戏，通知所有玩家游戏要开始了
+    def StartGame(self, code):
         for ID, Account in self.EntityDict.items():
-            ERROR_MSG("Room::EnterGame: AccountID %i" % ID)
+            ERROR_MSG("Room::StartGame: code %i" % code)
             Account.client.OnReqStartGame(code)
+
+    def EnterGame(self, EntityRole):
+        """
+        # 进入游戏
+        # :param EntityRole: 进入场景的Entity的Base实体
+        """
+        # 把实体放入房间的Cell空间 调用 self.cell.OnEnter(EntityRole) 也可以
+        EntityRole.createCellEntity(self.cell)
+        # 保存到玩家字典
+        self.RoleEntityDict[EntityRole.id] = EntityRole
 
 
 
