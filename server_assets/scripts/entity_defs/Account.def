@@ -47,6 +47,13 @@
             <Default> 0 </Default>
         </CurrentRoomID>
 
+        <!-- 玩家没选就自动选上次选的干员 -->
+        <CurrentRoleID>
+            <Type> DBID </Type>
+            <Flags> BASE_AND_CLIENT </Flags>
+            <Default> 0 </Default>
+            <Persistent> true </Persistent>
+        </CurrentRoleID>
     </Properties>
 
     <ClientMethods>
@@ -102,6 +109,12 @@
         <OnReqChangeState>
             <Arg> UINT8 </Arg>
         </OnReqChangeState>
+
+        <!-- 选择干员请求回调 -->
+        <OnReqSelectRole>
+            <Arg>  UINT8  </Arg> <!--结果-->
+            <Arg>  UINT8  </Arg> <!--选择的干员 编号 -->
+        </OnReqSelectRole>
     
         <!-- 通知房主客户端全员准备，0：全部准备，1：否  -->
         <OnAllReady>
@@ -160,8 +173,15 @@
             <Arg> UINT8 </Arg>
         </ReqChangeState>
 
+        <!-- 选择干员请求 -->
+        <ReqSelectRole>
+            <Exposed/>
+            <Arg> UINT8 </Arg> <!-- 角色类型RoleType -->
+        </ReqSelectRole>
+
         <!-- 房主请求开始游戏 -->
         <ReqStartGame>
+            <Exposed/>
             <Arg> UINT8 </Arg>
         </ReqStartGame>
     </BaseMethods>
