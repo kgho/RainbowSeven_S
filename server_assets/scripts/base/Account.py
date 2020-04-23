@@ -234,8 +234,13 @@ class Account(KBEngine.Proxy):
                 self.CurrentRoleID = info[0]
                 self.client.OnReqSelectRole(0, RoleType)
 
+
     def ReqStartGame(self, code):
         DEBUG_MSG("Account[%i].ReqStartGame: Code = %s" % (self.id, code))
+        KBEngine.globalData["RoomMgr"].RoomEnterGame(self.CurrentRoomID, code)
 
+    def ReqEnterGame(self, code):
+        DEBUG_MSG("Account[%i].ReqEnterGame: Code = %s" % (self.id, code))
+        self.client.OnReqEnterGame(code)
 
 

@@ -24,7 +24,7 @@ class RoomMgr(KBEngine.Entity):
         # 自动创建两个默认房间
         # Props = {"Name" : self.__ACCOUNT_NAME__, "Time" : time.strftime("%a %b %d %H:%M:%S %Y", time.localtime()), "Msg" : Msg}
         self.CreateRoom("服务器自动创建--肃清模式--木屋_1  "+time.strftime("%Y/%m/%d %H:%M:%S ", time.localtime()), None)
-        self.CreateRoom("服务器自动创建--肃清模式--木屋_2  "+time.strftime("%Y/%m/%d %H:%M:%S ", time.localtime()), None)
+        # self.CreateRoom("服务器自动创建--肃清模式--木屋_2  "+time.strftime("%Y/%m/%d %H:%M:%S ", time.localtime()), None)
 
 
     def CreateRoom(self, Name, Account):
@@ -126,3 +126,7 @@ class RoomMgr(KBEngine.Entity):
             ERROR_MSG("RoomMgr::LeaveRoom: Room with Id(%i) is none" % (RoomId))
             return
         Room.PlayerChangeState(EntityId, state)
+
+    def RoomEnterGame(self, RoomId, code):
+        Room = self.RoomList[RoomId]
+        Room.EnterGame(code)

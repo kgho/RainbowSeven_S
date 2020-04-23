@@ -28,7 +28,7 @@ class Room(KBEngine.Space):
         # 进入房间
         # EntityAccount : 进入房间的Entity 的 Base 实体
         """
-        ERROR_MSG("Room::Enteroom: Name %s" % EntityAccount.__ACCOUNT_NAME__)
+        ERROR_MSG("Room::EnterRoom: Name %s" % EntityAccount.__ACCOUNT_NAME__)
 
         # 客户端在房间直接退出游戏了，cell实体还没来得及销毁，此时不能进入房间
         if EntityAccount.cell is not None:
@@ -246,6 +246,12 @@ class Room(KBEngine.Space):
             # 进入了未准备的玩家,不能开始游戏
             if len(self.EntityDict) > 0:
                 self.EntityDict[self.masterEntityKey].client.OnAllReady(1)
+
+    def EnterGame(self, code):
+        for ID, Account in self.EntityDict.items():
+            ERROR_MSG("Room::EnterGame: AccountID %i" % ID)
+            Account.client.OnReqStartGame(code)
+
 
 
 

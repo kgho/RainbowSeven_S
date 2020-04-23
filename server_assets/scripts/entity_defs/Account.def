@@ -120,6 +120,17 @@
         <OnAllReady>
             <Arg> UINT8 </Arg>
         </OnAllReady>
+
+        <!-- 服务器收到房主发送的ReqStartGame后，回调给所有客户端，然后各客户端调用 ReqEnterGame -->
+        <OnReqStartGame>
+            <Arg> UINT8 </Arg>
+        </OnReqStartGame>
+
+        <!-- 玩家请求 进入 游戏 回调-->
+        <OnReqEnterGame>
+            <Exposed/>
+            <Arg> UINT8 </Arg>
+        </OnReqEnterGame>
     </ClientMethods>
 
     <BaseMethods>
@@ -179,7 +190,13 @@
             <Arg> UINT8 </Arg> <!-- 角色类型RoleType -->
         </ReqSelectRole>
 
-        <!-- 房主请求开始游戏 -->
+        <!-- 玩家请求 进入 游戏 -->
+        <ReqEnterGame>
+            <Exposed/>
+            <Arg> UINT8 </Arg>
+        </ReqEnterGame>
+
+        <!-- 房主请求 开始 游戏 -->
         <ReqStartGame>
             <Exposed/>
             <Arg> UINT8 </Arg>
@@ -187,6 +204,5 @@
     </BaseMethods>
 
     <CellMethods>
-
     </CellMethods>
 </root>
