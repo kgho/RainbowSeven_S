@@ -19,5 +19,5 @@ class Role(KBEngine.Proxy):
         if SymbolY is 0:
             SymbolY = -1
         #cellData cell实体还没生成的时候给他准备数据
-        self.cellData["SpawnPoint"] = Math.Vector3(random.randint(2500, 5000) * SymbolX, random.randint(2500, 5000) * SymbolY, 10)
+        self.cellData["SpawnPoint"] = Math.Vector3(random.randint(0, 10) * SymbolX, random.randint(0, 10) * SymbolY, 10)
         DEBUG_MSG("Role[%i] Base __init__. SpawnPoint:%s" % (self.id, self.cellData["SpawnPoint"]))

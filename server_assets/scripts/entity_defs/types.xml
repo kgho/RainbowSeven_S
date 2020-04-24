@@ -96,4 +96,17 @@
             </Value>
         </Properties>
     </PLAYER_LIST>
+
+    <!-- 动画同步数据类型 -->
+    <ANIM_INFO> FIXED_DICT
+        <implementedBy>ANIM_INFO.AnimInfoInst</implementedBy>
+        <Properties>
+            <Speed>
+                <Type>  FLOAT  </Type>
+            </Speed>
+            <Direction>
+                <Type>   FLOAT  </Type>
+            </Direction>
+        </Properties>
+    </ANIM_INFO>
 </root>

@@ -17,6 +17,7 @@
 
     <Interfaces>
         <Interface> Character </Interface>
+        <Interface> Motion </Interface>
     </Interfaces>
 
     <Properties>
