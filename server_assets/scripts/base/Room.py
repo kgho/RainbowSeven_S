@@ -94,7 +94,7 @@ class Room(KBEngine.Space):
             Account.client.OnReqEnterRoom(0, self.returnPlayerList(self.PlayerListBlue), self.returnPlayerList(self.PlayerListRed))
 
         # 把实体放入房间的cell空间，调用 self.cell.OnEnter(EntityRole) 也可
-        EntityAccount.createCellEntity(self.cell)
+        # EntityAccount.createCellEntity(self.cell)
 
     def Leave(self, EntityId):
         """

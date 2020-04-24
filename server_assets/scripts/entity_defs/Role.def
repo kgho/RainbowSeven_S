@@ -1,9 +1,30 @@
 <root>
+    <Volatile>
+        <position/> <!-- 总是同步到客户端 -->
+        <!--<position> 0 </position> 设置为0不同步到客户端-->
+        <!-- <yaw/>没有显示的设置则总是同步到客户端 -->
+        <!--<pitch> 20 </pitch> 和玩家位置20米以内同步到客户端-->
+        <yaw/>
+        <pitch/>
+        <roll/>
+
+        <!-- 优化VolatileInfo，关于VolatileInfo可以参考API文档，优化后服务器在确定实体在地面时（navigate）将不同步实体的Y坐标，客户端需要判断实体isOnGround，如果实体在地面则需要做贴地计算。
+            在高层建筑内寻路可能需要关闭优化，让服务器同步Y，这样才能精确计算上下层位置。
+            (不填默认为true)
+        -->
+        <optimized> false </optimized>
+    </Volatile>
+
     <Interfaces>
         <Interface> Character </Interface>
     </Interfaces>
 
     <Properties>
+        <!-- 实体生成时的位置 -->
+        <SpawnPoint>
+            <Type>     VECTOR3      </Type>
+            <Flags>     OWN_CLIENT  </Flags>
+        </SpawnPoint>
     </Properties>
 
     <BaseMethods>

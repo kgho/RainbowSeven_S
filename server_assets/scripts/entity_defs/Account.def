@@ -200,7 +200,7 @@
         <!-- 玩家请求 进入 游戏，进入地图 -->
         <ReqEnterGame>
             <Exposed/>
-            <Arg> UINT64 </Arg> <!-- 房间id -->
+            <Arg> UINT8 </Arg>
         </ReqEnterGame>
     </BaseMethods>
 

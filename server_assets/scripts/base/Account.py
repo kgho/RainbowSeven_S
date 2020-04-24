@@ -11,6 +11,8 @@ class Account(KBEngine.Proxy):
         # 用于判断是请求离开的房间，还是强退游戏离开的
         self.reqLeaveRoom = False
 
+        self.ActiveRole = None
+
     def onTimer(self, id, userArg):
         """
         KBEngine method.
@@ -238,10 +240,8 @@ class Account(KBEngine.Proxy):
         DEBUG_MSG("Account[%i].ReqStartGame: Code = %s" % (self.id, code))
         KBEngine.globalData["RoomMgr"].RoomStartGame(self.CurrentRoomID, code)
 
-    def ReqEnterGame(self, RoomId):
-        DEBUG_MSG("Account[%i].ReqEnterGame: Code = %i" % (self.id, RoomId))
-        # self.CurrentRoomID = RoomId
-        # self.client.OnReqEnterGame(code)
+    def ReqEnterGame(self, code):
+        DEBUG_MSG("Account[%i].ReqEnterGame: Code = %i" % (self.id, code))
         # 从数据库创建选中的角色
         KBEngine.createEntityFromDBID("Role", self.CurrentRoleID, self._OnRoleCreated)
 

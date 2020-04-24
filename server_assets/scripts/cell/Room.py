@@ -10,3 +10,4 @@ class Room(KBEngine.Space):
         KBEngine.Space.__init__(self)
 
         ERROR_MSG("Room.Cell::__init__. self.spaceID: %i" % self.spaceID )
+        KBEngine.addSpaceGeometryMapping(self.spaceID, None, "spaces/GameMap")
