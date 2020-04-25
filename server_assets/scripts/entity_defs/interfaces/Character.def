@@ -1,6 +1,6 @@
 <root>
 
-	<Properties>
+    <Properties>
         <Name>
             <Type>      UNICODE         </Type>
             <Flags>     ALL_CLIENTS     </Flags>
@@ -11,15 +11,47 @@
             <Flags>     ALL_CLIENTS     </Flags>
             <Persistent>	true	    </Persistent>
         </RoleType>
-	</Properties>
 
-	<ClientMethods>
-	</ClientMethods>
+        <!-- 游戏数据 -->
+        <BaseHP>    <!-- 初始血量 -->
+            <Type>    INT16    </Type>
+            <Flags>    ALL_CLIENTS    </Flags>
+            <Default>    100    </Default>
+        </BaseHP>
+        <HP>    <!-- 实际血量 -->
+            <Type>    INT16    </Type>
+            <Flags>    ALL_CLIENTS    </Flags>
+            <Default>    100    </Default>
+        </HP>
+        <Armor>    <!-- 护甲值 -->
+            <Type>    INT16    </Type>
+            <Flags>    OWN_CLIENT    </Flags>
+            <Default>    10    </Default>
+        </Armor>
+        <Speed>    <!-- 速度 -->
+            <Type>    INT16    </Type>
+            <Flags>    OWN_CLIENT    </Flags>
+            <Default>    1    </Default>
+        </Speed>
+        <ArmorRatio>   <!-- 护甲值，buff -->
+            <Type>    FLOAT    </Type>
+            <Flags>    OWN_CLIENT    </Flags>
+            <Default>    1.0    </Default>
+        </ArmorRatio>
+        <SpeedRatio>    <!-- 速度, buff -->
+            <Type>    FLOAT    </Type>
+            <Flags>    OWN_CLIENT    </Flags>
+            <Default>    1.0    </Default>
+        </SpeedRatio>
+    </Properties>
 
-	<BaseMethods>
-	</BaseMethods>
+    <ClientMethods>
+    </ClientMethods>
 
-	<CellMethods>
-	</CellMethods>
+    <BaseMethods>
+    </BaseMethods>
+
+    <CellMethods>
+    </CellMethods>
 
 </root>
