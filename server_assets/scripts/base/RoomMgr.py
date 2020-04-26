@@ -101,7 +101,7 @@ class RoomMgr(KBEngine.Entity):
         if Room is None:
             ERROR_MSG("RoomMgr::EnterRoom: Room with Id(%i) is none" % (RoomId))
             return
-        Room.Enter(EntityAccount)
+        Room.AccountEnter(EntityAccount)
 
     def LeaveRoom(self, EntityId, RoomId):
         """
@@ -113,7 +113,7 @@ class RoomMgr(KBEngine.Entity):
         if Room is None:
             ERROR_MSG("RoomMgr::LeaveRoom: Room with Id(%i) is none" % (RoomId))
             return
-        Room.Leave(EntityId)
+        Room.AccountLeave(EntityId)
 
     def PlayerChangeState(self, EntityId, RoomId, state):
         """

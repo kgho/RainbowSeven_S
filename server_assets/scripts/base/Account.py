@@ -220,7 +220,6 @@ class Account(KBEngine.Proxy):
             self.destroy()
 
     def ReqLeaveRoom(self):
-        if self.cell is not None:
             self.reqLeaveRoom = True
             ERROR_MSG("Account[%i].ReqLeaveRoom:" % self.id)
             KBEngine.globalData["RoomMgr"].LeaveRoom(self.id, self.CurrentRoomID)
