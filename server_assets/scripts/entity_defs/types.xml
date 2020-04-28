@@ -109,4 +109,35 @@
             </Direction>
         </Properties>
     </ANIM_INFO>
+
+        <!-- 对战数据，在房间开始游戏后，需要的数据 -->
+    <COMBAT_INFO> FIXED_DICT
+        <implementedBy>COMBAT_INFO.CombatInfoInst</implementedBy>
+        <Properties>
+            <Name>
+                <Type> UNICODE </Type>  <!-- 昵称 -->
+            </Name>
+            <RoleType>
+                <Type> UINT8 </Type>    <!-- 选择了哪个干员 -->
+            </RoleType>
+            <Point>
+                <Type> UINT16 </Type> <!-- 得分 -->
+            </Point>
+            <Kill>
+                <Type> UINT8 </Type> <!-- 击杀数 -->
+            </Kill>
+            <Death>
+                <Type> UINT8 </Type> <!-- 死亡数 -->
+            </Death>
+            <Assist>
+                <Type> UINT8 </Type> <!-- 助攻数 -->
+            </Assist>
+            <Ping>
+                <Type> UINT16 </Type> <!-- 网络Ping值 -->
+            </Ping>
+            <State>
+                <Type> UINT8 </Type> <!-- 0:存活，1：倒地，2：死亡 -->
+            </State>
+        </Properties>
+    </COMBAT_INFO>
 </root>

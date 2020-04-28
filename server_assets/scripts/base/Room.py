@@ -14,9 +14,11 @@ class Room(KBEngine.Space):
         KBEngine.Space.__init__(self)
 
         # 账户字典， key 实体ID ， value base实体 ，cell实体不考虑
-        self.EntityDict = {}
-        # 玩家信息字典,玩家名称作为 key, 玩家信息作为 value
+        self.AccountDict = {}
+
+        # 玩家信息字典,  key,  实体ID   玩家信息作为 value
         # 玩家分为 蓝 红 两队,每队最多5名玩家
+        # PlayerInfo 保存的是玩家在房间的数据，进入对战后不再改变。
         self.PlayerListBlue = {}
         self.PlayerListRed = {}
 
@@ -25,6 +27,9 @@ class Room(KBEngine.Space):
 
         # 房主在字典的 key
         self.masterEntityKey = 0
+
+        # 该房间是否正在游戏，目前不能中途加入
+        self.isInGame = False
 
     def AccountEnter(self, EntityAccount):
         """
@@ -37,12 +42,12 @@ class Room(KBEngine.Space):
         isMaster = 1
 
         # 蓝队是否有房主
-        for AccountName,PlayerInfo in self.PlayerListBlue.items():
+        for ID,PlayerInfo in self.PlayerListBlue.items():
             if PlayerInfo[4] == 1:
                 isMaster = 0
 
         # 红队是否有房主
-        for AccountName,PlayerInfo in self.PlayerListRed.items():
+        for ID,PlayerInfo in self.PlayerListRed.items():
             if PlayerInfo[4] == 1:
                 isMaster = 0
 
@@ -53,26 +58,26 @@ class Room(KBEngine.Space):
 
         if len(self.PlayerListBlue) <= len(self.PlayerListRed):
             if len(self.PlayerListBlue)<5:
-                self.PlayerListBlue[EntityAccount.__ACCOUNT_NAME__] = TPlayerInfo().createFromDict(Props)
+                self.PlayerListBlue[EntityAccount.id] = TPlayerInfo().createFromDict(Props)
             else:
                 self.returnOnReqEnterRoomFull(EntityAccount)
                 return
         else:
             if len(self.PlayerListRed) < 5:
-                self.PlayerListRed[EntityAccount.__ACCOUNT_NAME__] = TPlayerInfo().createFromDict(Props)
+                self.PlayerListRed[EntityAccount.id] = TPlayerInfo().createFromDict(Props)
             else:
                 self.returnOnReqEnterRoomFull(EntityAccount)
                 return
 
         # 将进入的实体保存到玩家字典
-        ERROR_MSG("Room::Enteroom: EntityDictCount %i" % len(self.EntityDict))
+        ERROR_MSG("Room::Enteroom: EntityDictCount %i" % len(self.AccountDict))
 
-        self.EntityDict[EntityAccount.id] = EntityAccount
+        self.AccountDict[EntityAccount.id] = EntityAccount
 
         # 进入的玩家未准备,通知房主不能开始游戏
-        self.EntityDict[self.masterEntityKey].client.OnAllReady(1)
+        self.AccountDict[self.masterEntityKey].client.OnAllReady(1)
 
-        for ID, Account in self.EntityDict.items():
+        for ID, Account in self.AccountDict.items():
             Account.client.OnReqEnterRoom(0, self.returnPlayerList(self.PlayerListBlue), self.returnPlayerList(self.PlayerListRed))
 
     def AccountLeave(self, EntityId):
@@ -81,20 +86,20 @@ class Room(KBEngine.Space):
         """
         ERROR_MSG("Room::AccountLeave:")
         # 获取玩家
-        EntityAccount = self.EntityDict[EntityId]
+        EntityAccount = self.AccountDict[EntityId]
 
         # 要删除的玩家名称,离开房间的是否是房主
         delPlayerName = ""
         isBlue = True
         isMaster = 0
 
-        for Name, Player in self.PlayerListBlue.items():
-            if Name == EntityAccount.__ACCOUNT_NAME__:
+        for ID, Player in self.PlayerListBlue.items():
+            if ID == EntityAccount.id:
                 delPlayerName = Name
                 isMaster = Player[4]
 
-        for Name, Player in self.PlayerListRed.items():
-            if Name == EntityAccount.__ACCOUNT_NAME__:
+        for ID, Player in self.PlayerListRed.items():
+            if ID == EntityAccount.__ACCOUNT_NAME__:
                 delPlayerName = Name
                 isBlue = False
                 isMaster = Player[4]
@@ -107,7 +112,7 @@ class Room(KBEngine.Space):
             del self.PlayerListRed[delPlayerName]
 
         # 把玩家移除字典
-        del self.EntityDict[EntityId]
+        del self.AccountDict[EntityId]
 
         # 如果离开的是房主，让列表里第一名玩家成为房主
         if isMaster == 1:
@@ -118,7 +123,7 @@ class Room(KBEngine.Space):
                 self.PlayerListBlue[result[0]][4] = 1
                 ERROR_MSG("Room::Leave--> BlueTeam:%s is Master." % result[0])
 
-                for ID, Account in self.EntityDict.items():
+                for ID, Account in self.AccountDict.items():
                     if Account.__ACCOUNT_NAME__ == result[0]:
                         self.masterEntityKey = ID
 
@@ -129,17 +134,17 @@ class Room(KBEngine.Space):
                 self.PlayerListRed[result[0]][4] = 1
                 ERROR_MSG("Room::Leave--> RedTeam:%s is Master." % result[0])
 
-                for ID, Account in self.EntityDict.items():
+                for ID, Account in self.AccountDict.items():
                     if Account.__ACCOUNT_NAME__ == result[0]:
                         self.masterEntityKey = ID
 
         # 有玩家退出了,通知其它玩家更新房间玩家信息
-        for ID, Account in self.EntityDict.items():
-            if EntityAccount.__ACCOUNT_NAME__ != Account.__ACCOUNT_NAME__:
+        for ID, Account in self.AccountDict.items():
+            if EntityAccount.id != Account.id:
                 Account.client.OnReqEnterRoom(0, self.returnPlayerList(self.PlayerListBlue), self.returnPlayerList(self.PlayerListRed))
 
         # 一个未准备的玩家退出后可能就全员准备了
-        if len(self.EntityDict) > 0:
+        if len(self.AccountDict) > 0:
             self.isAllReady()
 
         EntityAccount.client.OnReqLeaveRoom(0)
@@ -162,41 +167,41 @@ class Room(KBEngine.Space):
 
     def returnOnReqEnterRoomFull(self, EntityAccount):
         PlayerListBlue = TPlayerList()
-        for Name, Player in self.PlayerListBlue.items():
+        for ID, Player in self.PlayerListBlue.items():
             Props = {"Name" : Player[0], "Level" : Player[1], "State" : Player[2], "Avatar" : Player[3], "Master" : Player[4]}
-            PlayerListBlue[Name] = TPlayerInfo().createFromDict(Props)
+            PlayerListBlue[ID] = TPlayerInfo().createFromDict(Props)
 
         PlayerListRed = TPlayerList()
-        for Name, Player in self.PlayerListRed.items():
+        for ID, Player in self.PlayerListRed.items():
             Props = {"Name" : Player[0], "Level" : Player[1], "State" : Player[2], "Avatar" : Player[3], "Master" : Player[4]}
-            PlayerListRed[Name] = TPlayerInfo().createFromDict(Props)
+            PlayerListRed[ID] = TPlayerInfo().createFromDict(Props)
 
         EntityAccount.client.OnReqEnterRoom(2, PlayerListBlue, PlayerListRed)
         ERROR_MSG("Room::Enteroom: Full.")
 
     def returnPlayerList(self, PlayerList):
         tempPlayerList = TPlayerList()
-        for Name, Player in PlayerList.items():
+        for ID, Player in PlayerList.items():
             Props = {"Name" : Player[0], "Level" : Player[1], "State" : Player[2], "Avatar" : Player[3], "Master" : Player[4]}
-            tempPlayerList[Name] = TPlayerInfo().createFromDict(Props)
+            tempPlayerList[ID] = TPlayerInfo().createFromDict(Props)
         ERROR_MSG("Room::Enteroom: returnPlayerList:%i" % len(tempPlayerList))
         return tempPlayerList
 
     def PlayerChangeState(self, EntityId, state):
-        EntityAccount = self.EntityDict[EntityId]
+        EntityAccount = self.AccountDict[EntityId]
         # 改变状态的账户名
-        accountName = EntityAccount.__ACCOUNT_NAME__
+        ID = EntityAccount.id
 
         # 存储该玩家状态到房间
-        for k,v in self.PlayerListBlue.items():
-            if k == accountName:
+        for id,PlayerInfo in self.PlayerListBlue.items():
+            if id == ID:
                 v[2] = state
-        for k,v in self.PlayerListRed.items():
-            if k == accountName:
+        for id,PlayerInfo in self.PlayerListRed.items():
+            if id == ID:
                 v[2] = state
 
         # 有玩家状态改变,通知所有玩家更新
-        for ID, Account in self.EntityDict.items():
+        for ID, Account in self.AccountDict.items():
             Account.client.OnReqEnterRoom(0, self.returnPlayerList(self.PlayerListBlue), self.returnPlayerList(self.PlayerListRed))
 
         EntityAccount.client.OnReqChangeState(state)
@@ -209,33 +214,33 @@ class Room(KBEngine.Space):
         """
         ERROR_MSG("Room::Leave:")
         # 获取玩家
-        EntityAccount = self.EntityDict[EntityId]
+        EntityAccount = self.AccountDict[EntityId]
 
-        # 要删除的玩家名称,离开房间的是否是房主
-        delPlayerName = ""
+        # 要删除的玩家ID,离开房间的是否是房主
+        delPlayerID = ""
         isBlue = True
         isMaster = 0
 
-        for Name, Player in self.PlayerListBlue.items():
-            if Name == EntityAccount.__ACCOUNT_NAME__:
-                delPlayerName = Name
+        for ID, Player in self.PlayerListBlue.items():
+            if ID == EntityAccount.id:
+                delPlayerID = ID
                 isMaster = Player[4]
 
-        for Name, Player in self.PlayerListRed.items():
-            if Name == EntityAccount.__ACCOUNT_NAME__:
-                delPlayerName = Name
+        for ID, Player in self.PlayerListRed.items():
+            if ID == EntityAccount.id:
+                delPlayerID = ID
                 isBlue = False
                 isMaster = Player[4]
 
-        ERROR_MSG("Room::Leave--> Name:%s , isBlue:%s" % (delPlayerName, isBlue))
+        ERROR_MSG("Room::Leave--> ID:%s , isBlue:%s" % (delPlayerID, isBlue))
 
         if isBlue:
-            del self.PlayerListBlue[delPlayerName]
+            del self.PlayerListBlue[delPlayerID]
         else:
-            del self.PlayerListRed[delPlayerName]
+            del self.PlayerListRed[delPlayerID]
 
         # 把玩家移除字典
-        del self.EntityDict[EntityId]
+        del self.AccountDict[EntityId]
 
         # 如果离开的是房主，让列表里第一名玩家成为房主
         if isMaster == 1:
@@ -246,7 +251,7 @@ class Room(KBEngine.Space):
                 self.PlayerListBlue[result[0]][4] = 1
                 ERROR_MSG("Room::Leave--> BlueTeam:%s is Master." % result[0])
 
-                for ID, Account in self.EntityDict.items():
+                for ID, Account in self.AccountDict.items():
                     if Account.__ACCOUNT_NAME__ == result[0]:
                         self.masterEntityKey = ID
 
@@ -257,17 +262,17 @@ class Room(KBEngine.Space):
                 self.PlayerListRed[result[0]][4] = 1
                 ERROR_MSG("Room::Leave--> RedTeam:%s is Master." % result[0])
 
-                for ID, Account in self.EntityDict.items():
+                for ID, Account in self.AccountDict.items():
                     if Account.__ACCOUNT_NAME__ == result[0]:
                         self.masterEntityKey = ID
 
         # 有玩家退出了,通知其它玩家更新房间玩家信息
-        for ID, Account in self.EntityDict.items():
+        for ID, Account in self.AccountDict.items():
             if EntityAccount.__ACCOUNT_NAME__ != Account.__ACCOUNT_NAME__:
                 Account.client.OnReqEnterRoom(0, self.returnPlayerList(self.PlayerListBlue), self.returnPlayerList(self.PlayerListRed))
 
         # 一个未准备的玩家退出后可能就全员准备了
-        if len(self.EntityDict) > 0:
+        if len(self.AccountDict) > 0:
             self.isAllReady()
 
         # 销毁玩家cell实体
@@ -296,14 +301,14 @@ class Room(KBEngine.Space):
 
     def returnOnReqEnterRoomFull(self, EntityAccount):
         PlayerListBlue = TPlayerList()
-        for Name, Player in self.PlayerListBlue.items():
+        for ID, Player in self.PlayerListBlue.items():
             Props = {"Name" : Player[0], "Level" : Player[1], "State" : Player[2], "Avatar" : Player[3], "Master" : Player[4]}
-            PlayerListBlue[Name] = TPlayerInfo().createFromDict(Props)
+            PlayerListBlue[ID] = TPlayerInfo().createFromDict(Props)
 
         PlayerListRed = TPlayerList()
-        for Name, Player in self.PlayerListRed.items():
+        for ID, Player in self.PlayerListRed.items():
             Props = {"Name" : Player[0], "Level" : Player[1], "State" : Player[2], "Avatar" : Player[3], "Master" : Player[4]}
-            PlayerListRed[Name] = TPlayerInfo().createFromDict(Props)
+            PlayerListRed[ID] = TPlayerInfo().createFromDict(Props)
 
         EntityAccount.client.OnReqEnterRoom(2, PlayerListBlue, PlayerListRed)
         ERROR_MSG("Room::Enteroom: Full.")
@@ -317,20 +322,20 @@ class Room(KBEngine.Space):
         return tempPlayerList
 
     def PlayerChangeState(self, EntityId, state):
-        EntityAccount = self.EntityDict[EntityId]
-        # 改变状态的账户名
-        accountName = EntityAccount.__ACCOUNT_NAME__
+        EntityAccount = self.AccountDict[EntityId]
+        # 改变状态的账户 ID
+        ID = EntityAccount.id
 
         # 存储该玩家状态到房间
         for k,v in self.PlayerListBlue.items():
-            if k == accountName:
+            if k == ID:
                 v[2] = state
         for k,v in self.PlayerListRed.items():
-            if k == accountName:
+            if k == ID:
                 v[2] = state
 
         # 有玩家状态改变,通知所有玩家更新
-        for ID, Account in self.EntityDict.items():
+        for ID, Account in self.AccountDict.items():
             Account.client.OnReqEnterRoom(0, self.returnPlayerList(self.PlayerListBlue), self.returnPlayerList(self.PlayerListRed))
 
         EntityAccount.client.OnReqChangeState(state)
@@ -350,16 +355,16 @@ class Room(KBEngine.Space):
                 isAllReady = False
         if isAllReady:
             # 通知房主客户端可以开始游戏了,当前1个玩家也可以开始游戏
-            if len(self.EntityDict) > 0:
-                self.EntityDict[self.masterEntityKey].client.OnAllReady(0)
+            if len(self.AccountDict) > 0:
+                self.AccountDict[self.masterEntityKey].client.OnAllReady(0)
         else:
             # 进入了未准备的玩家,不能开始游戏
-            if len(self.EntityDict) > 0:
-                self.EntityDict[self.masterEntityKey].client.OnAllReady(1)
+            if len(self.AccountDict) > 0:
+                self.AccountDict[self.masterEntityKey].client.OnAllReady(1)
 
     # 房主请求开始游戏，通知所有玩家游戏要开始了
     def StartGame(self, code):
-        for ID, Account in self.EntityDict.items():
+        for ID, Account in self.AccountDict.items():
             ERROR_MSG("Room::StartGame: code %i" % code)
             Account.client.OnReqStartGame(code)
 
@@ -368,9 +373,10 @@ class Room(KBEngine.Space):
         # 进入游戏
         # :param EntityRole: 进入场景的Entity的Base实体
         """
+        ERROR_MSG("Room::EnterGame")
         # 把实体放入房间的Cell空间 调用 self.cell.OnEnter(EntityRole) 也可以
         EntityRole.createCellEntity(self.cell)
-        # 保存到玩家字典
+        # 保存到角色字典
         self.RoleEntityDict[EntityRole.id] = EntityRole
 
 

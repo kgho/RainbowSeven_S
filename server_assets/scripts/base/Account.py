@@ -240,7 +240,7 @@ class Account(KBEngine.Proxy):
         KBEngine.globalData["RoomMgr"].RoomStartGame(self.CurrentRoomID, code)
 
     def ReqEnterGame(self, code):
-        DEBUG_MSG("Account[%i].ReqEnterGame: Code = %i" % (self.id, code))
+        ERROR_MSG("Account[%i].ReqEnterGame: Code = %i" % (self.id, code))
         # 从数据库创建选中的角色
         KBEngine.createEntityFromDBID("Role", self.CurrentRoleID, self._OnRoleCreated)
 
