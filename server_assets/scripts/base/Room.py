@@ -74,11 +74,15 @@ class Room(KBEngine.Space):
 
         self.AccountDict[EntityAccount.id] = EntityAccount
 
+        EntityAccount.isInRoom = True
+
         # 进入的玩家未准备,通知房主不能开始游戏
         self.AccountDict[self.masterEntityKey].client.OnAllReady(1)
 
         for ID, Account in self.AccountDict.items():
             Account.client.OnReqEnterRoom(0, self.returnPlayerList(self.PlayerListBlue), self.returnPlayerList(self.PlayerListRed))
+
+        
 
     def AccountLeave(self, EntityId):
         """
@@ -89,27 +93,29 @@ class Room(KBEngine.Space):
         EntityAccount = self.AccountDict[EntityId]
 
         # 要删除的玩家名称,离开房间的是否是房主
-        delPlayerName = ""
+        delPlayerID = ""
         isBlue = True
         isMaster = 0
 
         for ID, Player in self.PlayerListBlue.items():
             if ID == EntityAccount.id:
-                delPlayerName = Name
+                delPlayerID = ID
                 isMaster = Player[4]
 
         for ID, Player in self.PlayerListRed.items():
-            if ID == EntityAccount.__ACCOUNT_NAME__:
-                delPlayerName = Name
+            if ID == EntityAccount.id:
+                delPlayerID = ID
                 isBlue = False
                 isMaster = Player[4]
 
-        ERROR_MSG("Room::AccountLeave--> Name:%s , isBlue:%s" % (delPlayerName, isBlue))
+        ERROR_MSG("Room::AccountLeave--> ID:%s , isBlue:%s" % (delPlayerID, isBlue))
 
         if isBlue:
-            del self.PlayerListBlue[delPlayerName]
+            del self.PlayerListBlue[delPlayerID]
         else:
-            del self.PlayerListRed[delPlayerName]
+            del self.PlayerListRed[delPlayerID]
+
+        self.AccountDict[EntityId].isInRoom = False
 
         # 把玩家移除字典
         del self.AccountDict[EntityId]
@@ -374,10 +380,37 @@ class Room(KBEngine.Space):
         # :param EntityRole: 进入场景的Entity的Base实体
         """
         ERROR_MSG("Room::EnterGame")
+
         # 把实体放入房间的Cell空间 调用 self.cell.OnEnter(EntityRole) 也可以
         EntityRole.createCellEntity(self.cell)
         # 保存到角色字典
         self.RoleEntityDict[EntityRole.id] = EntityRole
+
+    def QuitGame(self, AccountID, EntityRole):
+        """
+        # 退出游戏
+        # :param EntityRole: 退出游戏场景的Entity的Base实体
+        """
+        ERROR_MSG("Room::QuitGame")
+
+        self.AccountDict[AccountID].isInRoom = False
+        self.AccountDict[AccountID].isInGame = False
+
+        # 把玩家移出字典
+        del self.AccountDict[AccountID]
+
+        if self.PlayerListBlue.hsa_key():
+            del self.PlayerListBlue[AccountID]
+
+        if self.PlayerListRed.hsa_key():
+            del self.PlayerListRed[AccountID]
+        
+        # 把玩家角色移出字典
+        del self.RoleEntityDict[EntityRole.id]
+
+        # 销毁玩家cell实体
+        if EntityRole.cell is not None:
+            EntityRole.destroyCellEntity()
 
 
 

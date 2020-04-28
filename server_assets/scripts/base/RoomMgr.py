@@ -140,3 +140,10 @@ class RoomMgr(KBEngine.Entity):
             ERROR_MSG("RoomMgr::RoomEnterGame: Room with Id(%i)  is none" % (RoomId))
             return
         Room.EnterGame(EntityRole)
+
+    def RoomQuitGame(self, AccountID, EntityRole, RoomId):
+        Room = self.RoomList[RoomId]
+        if Room is None:
+            ERROR_MSG("RoomMgr::RoomQuitGame: Room with Id(%i)  is none" % (RoomId))
+            return
+        Room.QuitGame(AccountID, EntityRole)

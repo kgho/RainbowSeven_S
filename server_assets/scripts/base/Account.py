@@ -13,6 +13,12 @@ class Account(KBEngine.Proxy):
 
         self.ActiveRole = None
 
+        # 是否在房间中
+        self.isInRoom = False
+
+        # 是否在游戏中
+        self.isInGame = False
+
     def onTimer(self, id, userArg):
         """
         KBEngine method.
@@ -43,7 +49,10 @@ class Account(KBEngine.Proxy):
         KBEngine method.
         客户端对应实体已经销毁
         """
-        ERROR_MSG("Account[%i].onClientDeath:" % self.id)
+        if self.isInGame:
+            KBEngine.globalData["RoomMgr"].RoomQuitGame(self.id, self.ActiveRole, self.CurrentRoomID)
+
+
         # 如果cell存在，说明在房间中强退出了游戏
         if self.cell is not None:
             KBEngine.globalData["RoomMgr"].LeaveRoom(self.id, self.CurrentRoomID)

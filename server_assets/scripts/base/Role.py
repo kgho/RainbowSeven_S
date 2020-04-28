@@ -21,3 +21,9 @@ class Role(KBEngine.Proxy):
         #cellData cell实体还没生成的时候给他准备数据
         self.cellData["SpawnPoint"] = Math.Vector3(random.randint(0, 10) * SymbolX, random.randint(0, 10) * SymbolY, 10)
         DEBUG_MSG("Role[%i] Base __init__. SpawnPoint:%s" % (self.id, self.cellData["SpawnPoint"]))
+
+    def onClientDeath(self):
+        ERROR_MSG("Role[%i].onClientDeath:" % self.id)
+
+    def onLoseCell(self):
+        ERROR_MSG("Role[%i].onLoseCell:" % self.id)
